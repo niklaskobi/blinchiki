@@ -25,9 +25,7 @@ class _ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            //Navigator.pushNamed(context, TimerScreen.id),
-            Navigator.push(context, MaterialPageRoute(builder: (context) => TimerScreen(receipt: null))),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TimerScreen(receipt: null))),
         tooltip: 'Create new receipt',
         child: const Icon(Icons.add),
       ),
@@ -44,7 +42,6 @@ class _ListScreenState extends State<ListScreen> {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         child: new Row(
-          //mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             IconButton(

@@ -57,6 +57,10 @@ class ReceiptData extends ChangeNotifier {
 
   ReceiptList get receiptList => _receiptList;
 
+  void updateListItem(int index, Receipt r) {
+    //this._receiptList[index] = r;
+  }
+
   void updateReceiptList(String json) {
     this._receiptList = ReceiptList.fromJson(jsonDecode(json));
     notifyListeners();

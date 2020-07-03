@@ -23,6 +23,11 @@ class ReceiptList {
     _list.add(r);
   }
 
+  /// update item
+  void updateReceipt(int index, Receipt r) {
+    this._list[index] = r;
+  }
+
   Map<String, dynamic> toJson() => {'receiptList': jsonEncode(this._list)};
 
   int get receiptCount => _list.length;
