@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:blinchiki_app/data/fileIO.dart';
 import 'package:provider/provider.dart';
+import 'package:blinchiki_app/functions/common.dart';
 
 class ReceiptSettingsScreen extends StatefulWidget {
   final int receiptIndex;
@@ -26,103 +27,143 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
   static double _minChildSize = 0.15;
   final myController = TextEditingController();
 
+  /// vars -------------------------------------------------
+  int _timerIndex = 1;
+
   @override
   void dispose() {
     myController.dispose();
     super.dispose();
   }
 
-  /*
-  @override
-  void initState() {
-    if (widget.receiptIndex != -1) {
-      _receipt = Provider.of<ReceiptList>(context).getReceiptByIndex(widget.receiptIndex);
-      this._newReceipt = false;
-    } else {
-      _receipt = ReceiptData.defaultReceipt;
-      this._newReceipt = true;
-    }
-    super.initState();
-  }
-   */
-
   @override
   Widget build(BuildContext context) {
     final index = widget.receiptIndex;
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    final double _rowHeight = screenHeight * 0.07;
     final Color _bgColor = Colors.blue[100];
 
     bool _newReceipt = false;
     int durationIndex = 0;
     myController.text = Provider.of<ReceiptList>(context).getReceiptByIndex(index).name;
 
+    //TODO: refactor tableRows
     TableRow turnsRow = TableRow(
       children: <Widget>[
-        Icon(_turnsIcon),
-        Text(''),
+        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Text(''))),
+        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Icon(_turnsIcon))),
+        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Text(''))),
         SliderTheme(
           data: SliderTheme.of(context),
-          child: Slider(
-            value: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns.toDouble(),
-            divisions: 4,
-            min: 0,
-            max: 4,
-            //activeColor: Color(0xFFEB1555),
-            onChanged: (double newValue) {
-              setState(() {
-                Provider.of<ReceiptList>(context, listen: false).setTurns(index, newValue.toInt());
-              });
-            },
+          child: Container(
+            height: _rowHeight,
+            child: Align(
+              alignment: Alignment.center,
+              child: Slider(
+                value: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns.toDouble(),
+                divisions: 4,
+                min: 0,
+                max: 4,
+                //activeColor: Color(0xFFEB1555),
+                onChanged: (double newValue) {
+                  setState(() {
+                    Provider.of<ReceiptList>(context, listen: false).setTurns(index, newValue.toInt());
+                  });
+                },
+              ),
+            ),
           ),
         ),
-        Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns}')
+        Container(
+            height: _rowHeight,
+            child: Align(
+                alignment: Alignment.center,
+                child: Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns}'))),
       ],
     );
 
     TableRow steeringRow = TableRow(
       children: <Widget>[
-        Icon(_fireIcon),
+        Text(''),
+        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Icon(_fireIcon))),
         Text(''),
         SliderTheme(
           data: SliderTheme.of(context),
-          child: Slider(
-            value: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value,
-            divisions: 12,
-            min: 0.0,
-            max: 60.0,
-            //activeColor: Color(0xFFEB1555),
-            onChanged: (double newValue) {
-              setState(() {
-                Provider.of<ReceiptList>(context, listen: false).setSteering(index, newValue);
-              });
-            },
+          child: Container(
+            height: _rowHeight,
+            child: Align(
+              alignment: Alignment.center,
+              child: Slider(
+                value: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value,
+                divisions: 12,
+                min: 0.0,
+                max: 60.0,
+                //activeColor: Color(0xFFEB1555),
+                onChanged: (double newValue) {
+                  setState(() {
+                    Provider.of<ReceiptList>(context, listen: false).setSteering(index, newValue);
+                  });
+                },
+              ),
+            ),
           ),
         ),
         Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value}')
       ],
     );
 
+    String getTimerIndexStr() {
+      if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 1)
+        return '$_timerIndex';
+      else
+        return '';
+    }
+
     TableRow minutesRow = TableRow(
       children: <Widget>[
-        Icon(_timerIcon),
-        Text('\''),
+        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Text('${getTimerIndexStr()}'))),
+        Container(
+            height: _rowHeight,
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                child: IconButton(
+                  icon: Icon(_timerIcon),
+                  onPressed: () {
+                    setState(() {
+                      if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 1) {
+                        _timerIndex = rotatingIncrement(this._timerIndex, 1,
+                            Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns);
+                      }
+                    });
+                  },
+                ),
+              ),
+            )),
+        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Text('\''))),
         SliderTheme(
           data: SliderTheme.of(context),
-          child: Slider(
-            value: Provider.of<ReceiptList>(context, listen: false)
-                .getReceiptByIndex(index)
-                .getMinutes(durationIndex)
-                .toDouble(),
-            divisions: 30,
-            min: 0.0,
-            max: 30.0,
-            //activeColor: Color(0xFFEB1555),
-            onChanged: (double newValue) {
-              setState(() {
-                Provider.of<ReceiptList>(context, listen: false).setMinutes(index, durationIndex, newValue.round());
-              });
-            },
+          child: Container(
+            height: _rowHeight,
+            child: Align(
+              alignment: Alignment.center,
+              child: Slider(
+                value: Provider.of<ReceiptList>(context, listen: false)
+                    .getReceiptByIndex(index)
+                    .getMinutes(durationIndex)
+                    .toDouble(),
+                divisions: 30,
+                min: 0.0,
+                max: 30.0,
+                //activeColor: Color(0xFFEB1555),
+                onChanged: (double newValue) {
+                  setState(() {
+                    Provider.of<ReceiptList>(context, listen: false).setMinutes(index, durationIndex, newValue.round());
+                  });
+                },
+              ),
+            ),
           ),
         ),
         Text(
@@ -132,7 +173,18 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
 
     TableRow secondsRow = TableRow(
       children: <Widget>[
-        Icon(_timerIcon),
+        Text(''),
+        IconButton(
+          icon: Icon(_timerIcon),
+          onPressed: () {
+            setState(() {
+              if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 1) {
+                _timerIndex = rotatingIncrement(this._timerIndex, 1,
+                    Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns);
+              }
+            });
+          },
+        ),
         Text('\'\''),
         SliderTheme(
           data: SliderTheme.of(context),
@@ -143,7 +195,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
                 .toDouble(),
             divisions: 12,
             min: 0.0,
-            max: 60.0,
+            max: 55.0,
             //activeColor: Color(0xFFEB1555),
             onChanged: (double newValue) {
               setState(() {
@@ -228,10 +280,11 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: Table(
         columnWidths: {
-          0: FractionColumnWidth(0.07),
-          1: FractionColumnWidth(0.02),
-          2: FlexColumnWidth(1),
-          3: FractionColumnWidth(0.1),
+          0: FractionColumnWidth(0.02),
+          1: FractionColumnWidth(0.12),
+          2: FractionColumnWidth(0.02),
+          3: FlexColumnWidth(1),
+          4: FractionColumnWidth(0.1),
         },
         children: [minutesRow, secondsRow, steeringRow, turnsRow],
       ),
