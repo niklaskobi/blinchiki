@@ -33,7 +33,7 @@ class Receipt {
   int getMinutes(int index) => this._durations[index].minutes;
   setMinutes(int index, int value) => this._durations[index].minutes = value;
   int getSeconds(int index) => this._durations[index].seconds;
-  int getOverallSeconds(int index) => this._durations[index].getOverallSeconds();
+  int getOverallSeconds(int index) => this._durations[index].getOverallSeconds(); //TODO: sum up all durations
   setSeconds(int index, int value) => this._durations[index].seconds = value;
   SteeringSetting get steeringSetting => this._steeringSetting;
   String get name => this._name;

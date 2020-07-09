@@ -1,5 +1,5 @@
 import 'package:blinchiki_app/data/fileIO.dart';
-import 'package:blinchiki_app/models/receipt_data.dart';
+import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/list_screen.dart';
@@ -12,7 +12,7 @@ class Blinchiki extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => ReceiptData(),
+      builder: (context) => ReceiptList(),
       child: MaterialApp(
         theme: ThemeData(
           canvasColor: Colors.white,
@@ -31,7 +31,7 @@ class Blinchiki extends StatelessWidget {
         initialRoute: ListScreen.id,
         routes: {
           ListScreen.id: (context) => ListScreen(),
-          TimerScreen.id: (context) => TimerScreen(receipt: ReceiptData.defaultReceipt),
+          TimerScreen.id: (context) => TimerScreen(index: -1),
         },
       ),
     );

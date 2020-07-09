@@ -1,26 +1,21 @@
 import 'package:blinchiki_app/data/fileIO.dart';
 import 'package:blinchiki_app/models/icon_data_spec.dart';
 import 'package:blinchiki_app/models/receipt.dart';
+import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/models/receipt_data.dart';
 import 'package:blinchiki_app/screens/receipt_settings_screen.dart';
 import 'package:blinchiki_app/widgets/timer_painter.dart';
 import 'package:blinchiki_app/widgets/timer_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TimerScreen extends StatefulWidget {
   static const String id = 'timer_screen';
 
-  Receipt receipt;
-  bool newReceipt;
+  int _receiptIndex;
 
-  TimerScreen({Receipt receipt}) {
-    if (receipt != null) {
-      this.receipt = receipt;
-      this.newReceipt = false;
-    } else {
-      this.receipt = ReceiptData.defaultReceipt;
-      this.newReceipt = true;
-    }
+  TimerScreen({int index}) {
+    this._receiptIndex = index;
   }
 
   @override
@@ -29,16 +24,36 @@ class TimerScreen extends StatefulWidget {
 
 class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin {
   String receiptTitle = '';
-
+  bool _newReceipt;
+  //Receipt _receipt;
   AnimationController controller;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    /*
+    if (widget._receiptIndex != -1) {
+      print("trying to get receipt on index ${widget._receiptIndex}");
+      this._receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(widget._receiptIndex);
+      this._newReceipt = false;
+      print("got it, receipt = ${this._receipt.getOverallSeconds(0)}");
+    } else {
+      this._receipt = ReceiptData.defaultReceipt;
+      this._newReceipt = true;
+    }
+     */
+
+    int duration =
+        Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(widget._receiptIndex).getOverallSeconds(0);
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: widget.receipt.getOverallSeconds(0)),
+      //duration: Duration(seconds: this._receipt.getOverallSeconds(0)),
+      duration: Duration(seconds: duration),
     );
   }
 
@@ -60,9 +75,19 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Icon(IconDataSpec.getIconData(widget.receipt.iconId), size: screenWidth * 0.08),
+                    Consumer<ReceiptList>(builder: (context, receiptList, child) {
+                      return Icon(IconDataSpec.getIconData(receiptList.getReceiptByIndex(widget._receiptIndex).iconId),
+                          size: screenWidth * 0.08);
+                    }), //TODO: refactor get icon data, move it to receipt
                     SizedBox(width: screenWidth * 0.05),
-                    Text(widget.receipt.name, style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.black54)),
+                    Consumer<ReceiptList>(
+                      builder: (context, receiptList, child) {
+                        return Text(
+                          receiptList.getReceiptByIndex(widget._receiptIndex).name,
+                          style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.black54),
+                        );
+                      },
+                    ),
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.03, width: screenWidth),
@@ -83,7 +108,7 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
                           setState(() {
                             if (controller.isAnimating) {
                               controller.stop(canceled: true);
-                              print(controller.isAnimating);
+                              print("is animatin : ${controller.isAnimating}");
                             } else
                               controller.reverse(from: controller.value == 0.0 ? 1.0 : controller.value);
                           });
@@ -94,10 +119,7 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
                 ),
               ],
             ),
-            ReceiptSettingsScreen(
-              receipt: widget.receipt,
-              newReceipt: widget.newReceipt,
-            ),
+            ReceiptSettingsScreen(receiptIndex: widget._receiptIndex),
           ],
         ),
       ),

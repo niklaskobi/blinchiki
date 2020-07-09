@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:blinchiki_app/models/duration.dart';
@@ -18,7 +17,8 @@ class ReceiptData extends ChangeNotifier {
       activeBurnerIndex: 0,
       steeringSetting: defaultSteering);
 
-  static List<Receipt> _defaultReceiptList = [
+  /// default receipt list, used as initial list at the very 1 start of the app
+  static List<Receipt> defaultReceiptList = [
     Receipt(
         name: "Blini",
         durations: [defaultDuration],
@@ -49,7 +49,10 @@ class ReceiptData extends ChangeNotifier {
         steeringSetting: defaultSteering)
   ];
 
-  ReceiptList _receiptList = ReceiptList(_defaultReceiptList);
+/*
+  ReceiptList _receiptList() {
+    return ReceiptList(_defaultReceiptList);
+  }
 
   UnmodifiableListView<Receipt> get unmodifiableReceiptList {
     return UnmodifiableListView(_receiptList.get());
@@ -58,7 +61,16 @@ class ReceiptData extends ChangeNotifier {
   ReceiptList get receiptList => _receiptList;
 
   void updateListItem(int index, Receipt r) {
-    //this._receiptList[index] = r;
+    this._receiptList.updateReceiptOnIndex(index, r);
+    notifyListeners();
+  }
+
+  Receipt getReceiptByIndex(int index) {
+    return this._receiptList.getReceiptByIndex(index);
+  }
+
+  String getName(int index) {
+    return this._receiptList.getName(index);
   }
 
   void updateReceiptList(String json) {
@@ -69,4 +81,10 @@ class ReceiptData extends ChangeNotifier {
   void addReceipt(Receipt r) {
     _receiptList.addReceipt(r);
   }
+
+  /// parse Receipt list
+  static List<Receipt> receiptsFromJson(String json) =>
+      (jsonDecode(json) as List).map((i) => Receipt.fromJson(i)).toList();
+
+   */
 }

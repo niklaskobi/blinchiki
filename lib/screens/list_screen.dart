@@ -1,5 +1,5 @@
 import 'package:blinchiki_app/data/fileIO.dart';
-import 'package:blinchiki_app/models/receipt_data.dart';
+import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/screens/timer_screen.dart';
 import 'package:blinchiki_app/widgets/receipt_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +16,19 @@ class _ListScreenState extends State<ListScreen> {
   @override
   void initState() {
     super.initState();
+    //TODO: if file doesn't exist create default initial list
+    //TODO: test what happens if file doesn't exist / is corrupted
     FileIO().readString().then((String json) {
-      Provider.of<ReceiptData>(context).updateReceiptList(json);
+      Provider.of<ReceiptList>(context).initReceiptListFromJson(json);
     });
+    //print("receiptList was initiated: ${Provider.of<ReceiptList>(context).get()}");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TimerScreen(receipt: null))),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TimerScreen(index: -1))),
         tooltip: 'Create new receipt',
         child: const Icon(Icons.add),
       ),

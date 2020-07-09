@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:blinchiki_app/models/duration.dart';
 import 'package:blinchiki_app/models/receipt.dart';
+import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/models/receipt_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,23 +9,21 @@ import 'package:blinchiki_app/data/fileIO.dart';
 import 'package:provider/provider.dart';
 
 class ReceiptSettingsScreen extends StatefulWidget {
-  final Receipt receipt;
-  final bool newReceipt;
+  final int receiptIndex;
 
-  ReceiptSettingsScreen({this.receipt, this.newReceipt});
+  ReceiptSettingsScreen({this.receiptIndex});
 
   @override
   _ReceiptSettingsScreenState createState() => _ReceiptSettingsScreenState();
 }
 
 class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
+  /// statics ----------------------------------------------
   static IconData _fireIcon = FontAwesomeIcons.fire;
   static IconData _timerIcon = Icons.timer;
   static IconData _turnsIcon = Icons.repeat;
-
   static double _maxChildSize = 0.6;
   static double _minChildSize = 0.15;
-
   final myController = TextEditingController();
 
   @override
@@ -36,14 +32,30 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     super.dispose();
   }
 
+  /*
+  @override
+  void initState() {
+    if (widget.receiptIndex != -1) {
+      _receipt = Provider.of<ReceiptList>(context).getReceiptByIndex(widget.receiptIndex);
+      this._newReceipt = false;
+    } else {
+      _receipt = ReceiptData.defaultReceipt;
+      this._newReceipt = true;
+    }
+    super.initState();
+  }
+   */
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    int durationIndex = 0;
-    Color _bgColor = Colors.blue[100];
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final Color _bgColor = Colors.blue[100];
 
-    myController.text = widget.receipt.name;
+    //Receipt _receipt = Provider.of<ReceiptList>(context).getReceiptByIndex(widget.receiptIndex);
+    bool _newReceipt = false;
+    int durationIndex = 0;
+    myController.text = _receipt.name;
 
     TableRow turnsRow = TableRow(
       children: <Widget>[
@@ -52,19 +64,19 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
         SliderTheme(
           data: SliderTheme.of(context),
           child: Slider(
-            value: widget.receipt.turns.toDouble(),
+            value: _receipt.turns.toDouble(),
             divisions: 4,
             min: 0,
             max: 4,
             //activeColor: Color(0xFFEB1555),
             onChanged: (double newValue) {
               setState(() {
-                widget.receipt.setTurns(newValue.toInt());
+                _receipt.setTurns(newValue.toInt());
               });
             },
           ),
         ),
-        Text('${widget.receipt.turns}')
+        Text('${_receipt.turns}')
       ],
     );
 
@@ -75,19 +87,19 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
         SliderTheme(
           data: SliderTheme.of(context),
           child: Slider(
-            value: widget.receipt.steeringSetting.value,
+            value: _receipt.steeringSetting.value,
             divisions: 12,
             min: 0.0,
             max: 60.0,
             //activeColor: Color(0xFFEB1555),
             onChanged: (double newValue) {
               setState(() {
-                widget.receipt.steeringSetting.value = newValue;
+                _receipt.steeringSetting.value = newValue;
               });
             },
           ),
         ),
-        Text('${widget.receipt.steeringSetting.value}')
+        Text('${_receipt.steeringSetting.value}')
       ],
     );
 
@@ -98,19 +110,19 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
         SliderTheme(
           data: SliderTheme.of(context),
           child: Slider(
-            value: widget.receipt.getMinutes(durationIndex).toDouble(),
+            value: _receipt.getMinutes(durationIndex).toDouble(),
             divisions: 30,
             min: 0.0,
             max: 30.0,
             //activeColor: Color(0xFFEB1555),
             onChanged: (double newValue) {
               setState(() {
-                widget.receipt.setMinutes(durationIndex, newValue.round());
+                _receipt.setMinutes(durationIndex, newValue.round());
               });
             },
           ),
         ),
-        Text('${widget.receipt.getMinutes(durationIndex)} \'')
+        Text('${_receipt.getMinutes(durationIndex)} \'')
       ],
     );
 
@@ -121,19 +133,19 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
         SliderTheme(
           data: SliderTheme.of(context),
           child: Slider(
-            value: widget.receipt.getSeconds(durationIndex).toDouble(),
+            value: _receipt.getSeconds(durationIndex).toDouble(),
             divisions: 12,
             min: 0.0,
             max: 60.0,
             //activeColor: Color(0xFFEB1555),
             onChanged: (double newValue) {
               setState(() {
-                widget.receipt.setSeconds(durationIndex, newValue.round());
+                _receipt.setSeconds(durationIndex, newValue.round());
               });
             },
           ),
         ),
-        Text('${widget.receipt.getSeconds(durationIndex)} \'\'')
+        Text('${_receipt.getSeconds(durationIndex)} \'\'')
       ],
     );
 
@@ -155,13 +167,13 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Icon(_timerIcon),
-        Text('${widget.receipt.getMinutes(durationIndex)}:${widget.receipt.getSeconds(durationIndex)}'),
+        Text('${_receipt.getMinutes(durationIndex)}:${_receipt.getSeconds(durationIndex)}'),
         SizedBox(width: screenWidth * 0.03),
         Icon(_fireIcon),
-        Text('${widget.receipt.steeringSetting.value}'),
-        if (widget.receipt.turns > 0) SizedBox(width: screenWidth * 0.03),
-        if (widget.receipt.turns > 0) Icon(_turnsIcon),
-        if (widget.receipt.turns > 0) Text('${widget.receipt.turns}'),
+        Text('${_receipt.steeringSetting.value}'),
+        if (_receipt.turns > 0) SizedBox(width: screenWidth * 0.03),
+        if (_receipt.turns > 0) Icon(_turnsIcon),
+        if (_receipt.turns > 0) Text('${_receipt.turns}'),
         SizedBox(width: screenWidth * 0.1),
         Container(
           width: screenWidth * 0.1,
@@ -176,8 +188,8 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
                 color: Colors.black,
                 onPressed: () async {
                   print('Save Button Pressed');
-                  Provider.of<ReceiptData>(context).receiptList.addReceipt(Receipt.copy(widget.receipt));
-                  await FileIO().writeString(jsonEncode(Provider.of<ReceiptData>(context).receiptList));
+                  Provider.of<ReceiptList>(context).addReceipt(Receipt.copy(_receipt));
+                  await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).get));
                 },
               ))),
         )
@@ -187,14 +199,14 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       padding: EdgeInsets.only(left: screenWidth * 0.15, right: screenWidth * 0.15),
       child: TextFormField(
         //controller: myController,
-        initialValue: widget.receipt.name,
+        initialValue: _receipt.name,
         autofocus: false,
         textAlign: TextAlign.center,
         decoration: InputDecoration(hintText: "enter receipt name"),
         onChanged: (newText) {
           setState(() {
             //update name through receipt_data and receiver
-            widget.receipt.name = newText;
+            _receipt.name = newText;
           });
         },
       ),
@@ -215,7 +227,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     List<Widget> dragableItems = [draggableLogo, spaceSmall, headerTile, spaceBig, textField, table];
 
     return DraggableScrollableSheet(
-      initialChildSize: widget.newReceipt ? _maxChildSize : _minChildSize,
+      initialChildSize: _newReceipt ? _maxChildSize : _minChildSize,
       maxChildSize: _maxChildSize,
       minChildSize: _minChildSize,
       builder: (BuildContext context, ScrollController scrollController) {
