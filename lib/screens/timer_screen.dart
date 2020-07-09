@@ -36,25 +36,19 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    /*
-    if (widget._receiptIndex != -1) {
-      print("trying to get receipt on index ${widget._receiptIndex}");
-      this._receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(widget._receiptIndex);
-      this._newReceipt = false;
-      print("got it, receipt = ${this._receipt.getOverallSeconds(0)}");
-    } else {
-      this._receipt = ReceiptData.defaultReceipt;
-      this._newReceipt = true;
-    }
-     */
-
     int duration =
-        Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(widget._receiptIndex).getOverallSeconds(0);
+        Provider.of<ReceiptList>(context, listen: true).getReceiptByIndex(widget._receiptIndex).getOverallSeconds(0);
     controller = AnimationController(
       vsync: this,
       //duration: Duration(seconds: this._receipt.getOverallSeconds(0)),
       duration: Duration(seconds: duration),
     );
+  }
+
+  @override
+  dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,57 +61,59 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: screenHeight * 0.03, width: screenWidth),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Consumer<ReceiptList>(builder: (context, receiptList, child) {
-                      return Icon(IconDataSpec.getIconData(receiptList.getReceiptByIndex(widget._receiptIndex).iconId),
-                          size: screenWidth * 0.08);
-                    }), //TODO: refactor get icon data, move it to receipt
-                    SizedBox(width: screenWidth * 0.05),
-                    Consumer<ReceiptList>(
-                      builder: (context, receiptList, child) {
-                        return Text(
-                          receiptList.getReceiptByIndex(widget._receiptIndex).name,
-                          style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.black54),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.03, width: screenWidth),
-                TimerWidget(controller: controller),
-                Container(
-                  margin: EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: screenHeight * 0.03, width: screenWidth),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      FloatingActionButton(
-                        child: AnimatedBuilder(
-                          animation: controller,
-                          builder: (BuildContext context, Widget child) {
-                            return new Icon(controller.isAnimating ? Icons.pause : Icons.play_arrow);
-                          },
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            if (controller.isAnimating) {
-                              controller.stop(canceled: true);
-                              print("is animatin : ${controller.isAnimating}");
-                            } else
-                              controller.reverse(from: controller.value == 0.0 ? 1.0 : controller.value);
-                          });
+                      Consumer<ReceiptList>(builder: (context, receiptList, child) {
+                        return Icon(
+                            IconDataSpec.getIconData(receiptList.getReceiptByIndex(widget._receiptIndex).iconId),
+                            size: screenWidth * 0.08);
+                      }), //TODO: refactor get icon data, move it to receipt
+                      SizedBox(width: screenWidth * 0.05),
+                      Consumer<ReceiptList>(
+                        builder: (context, receiptList, child) {
+                          return Text(
+                            receiptList.getReceiptByIndex(widget._receiptIndex).name,
+                            style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.black54),
+                          );
                         },
-                      )
+                      ),
                     ],
                   ),
-                ),
-              ],
+                  SizedBox(height: screenHeight * 0.03, width: screenWidth),
+                  TimerWidget(controller: controller),
+                  Container(
+                    margin: EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        FloatingActionButton(
+                          child: AnimatedBuilder(
+                            animation: controller,
+                            builder: (BuildContext context, Widget child) {
+                              return new Icon(controller.isAnimating ? Icons.pause : Icons.play_arrow);
+                            },
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (controller.isAnimating) {
+                                controller.stop(canceled: true);
+                              } else
+                                controller.reverse(from: controller.value == 0.0 ? 1.0 : controller.value);
+                            });
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             ReceiptSettingsScreen(receiptIndex: widget._receiptIndex),
           ],

@@ -28,7 +28,10 @@ class _ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TimerScreen(index: -1))),
+        onPressed: () {
+          int newReceiptIndex = Provider.of<ReceiptList>(context).createReceipt();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => TimerScreen(index: newReceiptIndex)));
+        },
         tooltip: 'Create new receipt',
         child: const Icon(Icons.add),
       ),

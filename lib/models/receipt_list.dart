@@ -9,9 +9,7 @@ class ReceiptList extends ChangeNotifier {
   List<Receipt> _list;
 
   ReceiptList() {
-    print("constructor");
     this._list = ReceiptData.defaultReceiptList;
-    print("Ready");
   }
 
   List<Receipt> get() => this._list;
@@ -41,7 +39,6 @@ class ReceiptList extends ChangeNotifier {
 
   /// getter by index
   Receipt getReceiptByIndex(int index) {
-    print("im in");
     return _list[index];
   }
 
@@ -53,15 +50,48 @@ class ReceiptList extends ChangeNotifier {
   /// set turns on index
   void setTurns(int index, int t) {
     this._list[index].setTurns(t);
+  }
+
+  /// set steering on index
+  void setSteering(int index, double s) {
+    this._list[index].steeringSetting.value = s;
+  }
+
+  /// set seconds on index
+  void setSeconds(int index, int timerIndex, int s) {
+    this._list[index].setSeconds(timerIndex, s);
     notifyListeners();
   }
 
+  /// set minutes on index
+  void setMinutes(int index, int timerIndex, int s) {
+    this._list[index].setMinutes(timerIndex, s);
+    notifyListeners();
+  }
+
+  /// set name on index
+  void setName(int index, String name) {
+    this._list[index].name = name;
+    notifyListeners();
+  }
+
+  /// create new receipt and return its index
+  int createReceipt() {
+    Receipt newReceipt = Receipt.copy(ReceiptData.defaultReceipt);
+    this._list.add(newReceipt);
+    return this._list.indexOf(newReceipt);
+  }
+
   void initReceiptListFromJson(String json) {
+    print(jsonDecode(json));
     initFromJson(jsonDecode(json));
     notifyListeners();
   }
 
-  Map<String, dynamic> toJson() => {'receiptList': jsonEncode(this._list)};
+  Map<String, dynamic> toJson() {
+    print("!!!!!!! toJSon");
+    return {'receiptList': jsonEncode(this._list)};
+  }
 
   /// get count of all receipts
   int get receiptCount => _list.length;
