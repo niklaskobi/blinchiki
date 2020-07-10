@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:blinchiki_app/data/fileIO.dart';
 import 'package:provider/provider.dart';
 import 'package:blinchiki_app/functions/common.dart';
+import 'package:blinchiki_app/widgets/table_row.dart';
 
 class ReceiptSettingsScreen extends StatefulWidget {
   final int receiptIndex;
@@ -48,166 +49,105 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     int durationIndex = 0;
     myController.text = Provider.of<ReceiptList>(context).getReceiptByIndex(index).name;
 
-    //TODO: refactor tableRows
-    TableRow turnsRow = TableRow(
-      children: <Widget>[
-        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Text(''))),
-        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Icon(_turnsIcon))),
-        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Text(''))),
-        SliderTheme(
-          data: SliderTheme.of(context),
-          child: Container(
-            height: _rowHeight,
-            child: Align(
-              alignment: Alignment.center,
-              child: Slider(
-                value: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns.toDouble(),
-                divisions: 4,
-                min: 0,
-                max: 4,
-                //activeColor: Color(0xFFEB1555),
-                onChanged: (double newValue) {
-                  setState(() {
-                    Provider.of<ReceiptList>(context, listen: false).setTurns(index, newValue.toInt());
-                  });
-                },
-              ),
-            ),
-          ),
-        ),
-        Container(
-            height: _rowHeight,
-            child: Align(
-                alignment: Alignment.center,
-                child: Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns}'))),
-      ],
-    );
-
-    TableRow steeringRow = TableRow(
-      children: <Widget>[
-        Text(''),
-        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Icon(_fireIcon))),
-        Text(''),
-        SliderTheme(
-          data: SliderTheme.of(context),
-          child: Container(
-            height: _rowHeight,
-            child: Align(
-              alignment: Alignment.center,
-              child: Slider(
-                value: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value,
-                divisions: 12,
-                min: 0.0,
-                max: 60.0,
-                //activeColor: Color(0xFFEB1555),
-                onChanged: (double newValue) {
-                  setState(() {
-                    Provider.of<ReceiptList>(context, listen: false).setSteering(index, newValue);
-                  });
-                },
-              ),
-            ),
-          ),
-        ),
-        Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value}')
-      ],
-    );
-
+    /// returns the timer index if turns counter is greater than 1
     String getTimerIndexStr() {
-      if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 1)
-        return '$_timerIndex';
+      int turns = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns;
+      if (turns > 0)
+        return '$_timerIndex / $turns';
       else
         return '';
     }
 
-    TableRow minutesRow = TableRow(
-      children: <Widget>[
-        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Text('${getTimerIndexStr()}'))),
-        Container(
-            height: _rowHeight,
-            child: Align(
-              alignment: Alignment.center,
-              child: Container(
-                child: IconButton(
-                  icon: Icon(_timerIcon),
-                  onPressed: () {
-                    setState(() {
-                      if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 1) {
-                        _timerIndex = rotatingIncrement(this._timerIndex, 1,
-                            Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns);
-                      }
-                    });
-                  },
-                ),
-              ),
-            )),
-        Container(height: _rowHeight, child: Align(alignment: Alignment.center, child: Text('\''))),
-        SliderTheme(
-          data: SliderTheme.of(context),
-          child: Container(
-            height: _rowHeight,
-            child: Align(
-              alignment: Alignment.center,
-              child: Slider(
-                value: Provider.of<ReceiptList>(context, listen: false)
-                    .getReceiptByIndex(index)
-                    .getMinutes(durationIndex)
-                    .toDouble(),
-                divisions: 30,
-                min: 0.0,
-                max: 30.0,
-                //activeColor: Color(0xFFEB1555),
-                onChanged: (double newValue) {
-                  setState(() {
-                    Provider.of<ReceiptList>(context, listen: false).setMinutes(index, durationIndex, newValue.round());
-                  });
-                },
-              ),
-            ),
-          ),
-        ),
-        Text(
-            '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).getMinutes(durationIndex)} \'')
-      ],
+    /// increment the turns index when pressing on the timer icon
+    void timerOnTap() {
+      setState(() {
+        if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 1) {
+          _timerIndex = rotatingIncrement(
+              this._timerIndex, 1, Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns);
+        }
+      });
+    }
+
+    /// turns row ----------------------------------------------------------------------------------------------------
+    TableRow turnsRow = MyTableRow.createTableRow(
+      _rowHeight,
+      '',
+      '',
+      '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns}',
+      _timerIcon,
+      index,
+      4,
+      0.0,
+      4.0,
+      Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns.toDouble(),
+      null,
+      (double value) {
+        setState(() {
+          Provider.of<ReceiptList>(context, listen: false).setTurns(index, value.toInt());
+        });
+      },
+      context,
     );
 
-    TableRow secondsRow = TableRow(
-      children: <Widget>[
-        Text(''),
-        IconButton(
-          icon: Icon(_timerIcon),
-          onPressed: () {
-            setState(() {
-              if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 1) {
-                _timerIndex = rotatingIncrement(this._timerIndex, 1,
-                    Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns);
-              }
-            });
-          },
-        ),
-        Text('\'\''),
-        SliderTheme(
-          data: SliderTheme.of(context),
-          child: Slider(
-            value: Provider.of<ReceiptList>(context, listen: false)
-                .getReceiptByIndex(index)
-                .getSeconds(durationIndex)
-                .toDouble(),
-            divisions: 12,
-            min: 0.0,
-            max: 55.0,
-            //activeColor: Color(0xFFEB1555),
-            onChanged: (double newValue) {
-              setState(() {
-                Provider.of<ReceiptList>(context, listen: false).setSeconds(index, durationIndex, newValue.round());
-              });
-            },
-          ),
-        ),
-        Text(
-            '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).getSeconds(durationIndex)} \'\'')
-      ],
+    /// steering row --------------------------------------------------------------------------------------------------
+    TableRow steeringRow = MyTableRow.createTableRow(
+      _rowHeight,
+      '',
+      '',
+      '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value}',
+      _fireIcon,
+      index,
+      12,
+      0.0,
+      60.0,
+      Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value,
+      null,
+      (double newValue) {
+        setState(() {
+          Provider.of<ReceiptList>(context, listen: false).setSteering(index, newValue);
+        });
+      },
+      context,
     );
+
+    /// minutes row ---------------------------------------------------------------------------------------------------
+    TableRow minutesRow = MyTableRow.createTableRow(
+      _rowHeight,
+      '${getTimerIndexStr()}',
+      '\'',
+      '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).getMinutes(durationIndex)} \'',
+      _timerIcon,
+      index,
+      30,
+      0.0,
+      30.0,
+      Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).getMinutes(durationIndex).toDouble(),
+      timerOnTap,
+      (double newValue) {
+        setState(() {
+          Provider.of<ReceiptList>(context, listen: false).setMinutes(index, durationIndex, newValue.round());
+        });
+      },
+      context,
+    );
+
+    /// seconds row ---------------------------------------------------------------------------------------------------
+    TableRow secondsRow = MyTableRow.createTableRow(
+        _rowHeight,
+        '${getTimerIndexStr()}',
+        '\'\'',
+        '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).getSeconds(durationIndex)} \'\'',
+        _timerIcon,
+        index,
+        11,
+        0.0,
+        55.0,
+        Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).getSeconds(durationIndex).toDouble(),
+        timerOnTap, (double newValue) {
+      setState(() {
+        Provider.of<ReceiptList>(context, listen: false).setSeconds(index, durationIndex, newValue.round());
+      });
+    }, context);
 
     Widget draggableLogo = Row(
       mainAxisAlignment: MainAxisAlignment.center,
