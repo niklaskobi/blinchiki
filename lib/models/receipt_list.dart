@@ -28,34 +28,28 @@ class ReceiptList extends ChangeNotifier {
   }
 
   /// update item
-  void updateReceiptOnIndex(int index, Receipt r) {
-    this._list[index] = r;
-  }
+  void updateReceiptOnIndex(int index, Receipt r) => this._list[index] = r;
 
   /// getter unmodifiable
-  UnmodifiableListView<Receipt> get unmodifiableReceiptList {
-    return UnmodifiableListView(this._list);
-  }
+  UnmodifiableListView<Receipt> get unmodifiableReceiptList => UnmodifiableListView(this._list);
 
   /// getter by index
-  Receipt getReceiptByIndex(int index) {
-    return _list[index];
-  }
+  Receipt getReceiptByIndex(int index) => _list[index];
 
   /// get active receipt name
-  String getName(int index) {
-    return this._list[index].name;
-  }
+  String getName(int index) => this._list[index].name;
 
   /// set turns on index
-  void setTurns(int index, int t) {
-    this._list[index].setTurns(t);
+  void setTurns(int index, int t) => this._list[index].setTurns(t);
+
+  /// add new Duration
+  void addNewDuration(int index) {
+    this._list[index].addNewDuration();
+    notifyListeners();
   }
 
   /// set steering on index
-  void setSteering(int index, double s) {
-    this._list[index].steeringSetting.value = s;
-  }
+  void setSteering(int index, double s) => this._list[index].steeringSetting.value = s;
 
   /// set seconds on index
   void setSeconds(int index, int timerIndex, int s) {
@@ -86,6 +80,10 @@ class ReceiptList extends ChangeNotifier {
     print(jsonDecode(json));
     initFromJson(jsonDecode(json));
     notifyListeners();
+  }
+
+  void deleteReceipt(int index) {
+    this._list.removeAt(index);
   }
 
   Map<String, dynamic> toJson() {

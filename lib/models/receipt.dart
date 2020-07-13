@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blinchiki_app/models/duration.dart';
+import 'package:blinchiki_app/models/receipt_data.dart';
 import 'package:blinchiki_app/models/steering_setting.dart';
 
 class Receipt {
@@ -12,6 +13,7 @@ class Receipt {
   int _turns;
   SteeringSetting _steeringSetting;
 
+  /// constructor
   Receipt(
       {String name,
       List<MyDuration> durations,
@@ -29,16 +31,32 @@ class Receipt {
     this._steeringSetting = steeringSetting;
   }
 
-  /// getters and setters
+  /// duration
+  getDurationStr(int index) => this._durations[index].toString();
+  getDurationAmount() => this._durations.length;
+  addNewDuration() => this._durations.add(ReceiptData.zeroDuration);
+  List<MyDuration> get durations => this._durations;
+
+  /// minutes
   int getMinutes(int index) => this._durations[index].minutes;
   setMinutes(int index, int value) => this._durations[index].minutes = value;
+
+  /// seconds
   int getSeconds(int index) => this._durations[index].seconds;
-  int getOverallSeconds(int index) => this._durations[index].getOverallSeconds(); //TODO: sum up all durations
   setSeconds(int index, int value) => this._durations[index].seconds = value;
+  int getOverallSeconds(int index) => this._durations[index].getOverallSeconds(); //TODO: sum up all durations
+
+  /// steering
   SteeringSetting get steeringSetting => this._steeringSetting;
+
+  /// name
   String get name => this._name;
   set name(String value) => this._name = value;
+
+  /// icon
   int get iconId => this._iconId;
+
+  /// turns
   int get turns => this._turns == null ? 0 : this._turns;
   setTurns(int t) => this._turns = t;
 

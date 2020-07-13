@@ -10,5 +10,7 @@ class MyDuration {
 
   Map<String, dynamic> toJson() => {'minutes': minutes, 'seconds': seconds};
 
+  String toString() => '${this.minutes}:${this.seconds.toString().padRight(2, '0')}';
+
   int getOverallSeconds() => this.minutes * 60 + this.seconds;
 }

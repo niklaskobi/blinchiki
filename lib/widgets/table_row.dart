@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 
 class MyTableRow {
-  static TableRow createTableRow(
+  static TableRow createTableRow({
     double rowHeight,
     String text1,
     String text2,
@@ -17,10 +17,17 @@ class MyTableRow {
     Function iconFunction,
     Function sliderFunction,
     BuildContext context,
-  ) {
+  }) {
     return TableRow(
       children: <Widget>[
-        Container(height: rowHeight, child: Align(alignment: Alignment.center, child: Text(text1))),
+        Container(
+            height: rowHeight,
+            child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  text1,
+                  style: TextStyle(fontSize: 13),
+                ))),
         Container(
             height: rowHeight,
             child: Align(
