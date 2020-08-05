@@ -25,7 +25,7 @@ class FileIO {
   /// write string to file
   Future<File> writeString(String json) async {
     final file = await _localFile;
-    print('writeString: $json');
+    print('write json to device: $json');
 
     return file.writeAsString(json);
   }

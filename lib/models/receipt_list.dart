@@ -88,7 +88,6 @@ class ReceiptList extends ChangeNotifier {
   }
 
   void initReceiptListFromJson(String json) {
-    print(jsonDecode(json));
     initFromJson(jsonDecode(json));
     notifyListeners();
   }
@@ -100,7 +99,6 @@ class ReceiptList extends ChangeNotifier {
   }
 
   Map<String, dynamic> toJson() {
-    print("!!!!!!! toJSon");
     return {'receiptList': jsonEncode(this._list)};
   }
 

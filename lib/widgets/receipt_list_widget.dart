@@ -31,44 +31,45 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
       );
     }
 
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        final receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index);
-        return Dismissible(
-          key: Key(receipt.name),
-          onDismissed: (direction) {
-            print('is dismissed');
-          },
-          child: Slidable(
-            dismissal: SlidableDismissal(
-              child: SlidableDrawerDismissal(),
-              onDismissed: (actionType) {
-                saveIndex = index;
-                saveReceipt = receipt.copy();
-                setState(() {
-                  Provider.of<ReceiptList>(context, listen: false).deleteReceipt(index);
-                });
-                Scaffold.of(context).showSnackBar(getSnackBar(receipt.name));
-              },
-            ),
+    return Consumer<ReceiptList>(builder: (context, receiptList, child) {
+      return ListView.builder(
+        itemBuilder: (context, index) {
+          final receipt = receiptList.getReceiptByIndex(index);
+          return Dismissible(
             key: Key(receipt.name),
-            actionPane: SlidableDrawerActionPane(),
-            actionExtentRatio: 0.25,
-            child: Container(
-              color: Colors.white,
-              child: ReceiptTileWidget(
-                iconData: IconDataSpec.getIconData(receipt.iconId),
-                receiptTitle: receipt.name,
-                shortPressCallback: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TimerScreen(receiptIndex: index, newReceipt: false),
-                      ));
+            onDismissed: (direction) {
+              print('is dismissed');
+            },
+            child: Slidable(
+              dismissal: SlidableDismissal(
+                child: SlidableDrawerDismissal(),
+                onDismissed: (actionType) {
+                  saveIndex = index;
+                  saveReceipt = receipt.copy();
+                  setState(() {
+                    Provider.of<ReceiptList>(context, listen: false).deleteReceipt(index);
+                  });
+                  Scaffold.of(context).showSnackBar(getSnackBar(receipt.name));
                 },
               ),
-            ),
-            /*
+              key: Key(receipt.name),
+              actionPane: SlidableDrawerActionPane(),
+              actionExtentRatio: 0.25,
+              child: Container(
+                color: Colors.white,
+                child: ReceiptTileWidget(
+                  iconData: IconDataSpec.getIconData(receipt.iconId),
+                  receiptTitle: receipt.name,
+                  shortPressCallback: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TimerScreen(receiptIndex: index, newReceipt: false),
+                        ));
+                  },
+                ),
+              ),
+              /*
               actions: <Widget>[
                 IconSlideAction(
                     caption: 'Archive',
@@ -84,8 +85,8 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
                     ),
               ],
                */
-            secondaryActions: <Widget>[
-              /*
+              secondaryActions: <Widget>[
+                /*
                 IconSlideAction(
                     caption: 'More',
                     color: Colors.black45,
@@ -93,23 +94,24 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
                     onTap: () => print('More') //_showSnackBar('More'),
                     ),
                  */
-              IconSlideAction(
-                  caption: 'Delete',
-                  color: Colors.red,
-                  icon: Icons.delete,
-                  onTap: () => {
-                        saveIndex = index,
-                        saveReceipt = receipt.copy(),
-                        setState(() {
-                          Provider.of<ReceiptList>(context, listen: false).deleteReceipt(index);
+                IconSlideAction(
+                    caption: 'Delete',
+                    color: Colors.red,
+                    icon: Icons.delete,
+                    onTap: () => {
+                          saveIndex = index,
+                          saveReceipt = receipt.copy(),
+                          setState(() {
+                            Provider.of<ReceiptList>(context, listen: false).deleteReceipt(index);
+                          }),
+                          Scaffold.of(context).showSnackBar(getSnackBar(receipt.name))
                         }),
-                        Scaffold.of(context).showSnackBar(getSnackBar(receipt.name))
-                      }),
-            ],
-          ),
-        );
-      },
-      itemCount: Provider.of<ReceiptList>(context, listen: false).receiptCount,
-    );
+              ],
+            ),
+          );
+        },
+        itemCount: Provider.of<ReceiptList>(context, listen: false).receiptCount,
+      );
+    });
   }
 }
