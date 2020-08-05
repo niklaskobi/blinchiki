@@ -89,14 +89,14 @@ class Receipt {
       };
 
   /// copy constructor
-  static Receipt copy(Receipt o) {
+  Receipt copy() {
     return Receipt(
-        name: o._name,
-        durations: o._durations,
-        iconId: o._iconId,
-        stoveId: o._stoveId,
-        activeBurnerIndex: o._activeBurnerIndex,
-        //turns: o._turns,
-        steeringSetting: o._steeringSetting);
+        name: this._name,
+        durations: this._durations,
+        iconId: this._iconId,
+        stoveId: this._stoveId,
+        activeBurnerIndex: this._activeBurnerIndex,
+        //turns: this._turns,
+        steeringSetting: this._steeringSetting);
   }
 }

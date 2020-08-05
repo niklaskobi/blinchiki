@@ -82,7 +82,7 @@ class ReceiptList extends ChangeNotifier {
 
   /// create new receipt and return its index
   int createReceipt() {
-    Receipt newReceipt = Receipt.copy(ReceiptData.defaultReceipt);
+    Receipt newReceipt = ReceiptData.getDefaultReceipt();
     this._list.add(newReceipt);
     return this._list.indexOf(newReceipt);
   }

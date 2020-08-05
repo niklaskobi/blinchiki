@@ -13,4 +13,9 @@ class MyDuration {
   String toString() => '${this.minutes}:${this.seconds.toString().padLeft(2, '0')}';
 
   int getOverallSeconds() => this.minutes * 60 + this.seconds;
+
+  /// copy constructor
+  MyDuration copy() {
+    return MyDuration(minutes: this.minutes, seconds: this.seconds);
+  }
 }

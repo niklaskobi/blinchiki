@@ -56,6 +56,8 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
     ThemeData themeData = Theme.of(context);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    print(
+        'receipt = ${Provider.of<ReceiptList>(context, listen: true).getReceiptByIndex(widget._receiptIndex).toJson()}');
 
     return Scaffold(
       body: SafeArea(

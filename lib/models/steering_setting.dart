@@ -7,6 +7,11 @@ class SteeringSetting {
 
   SteeringSetting({this.min, this.max, this.step, this.value, this.steeringId});
 
+  SteeringSetting copy() {
+    return SteeringSetting(
+        min: this.min, max: this.max, step: this.step, value: this.value, steeringId: this.steeringId);
+  }
+
   SteeringSetting.fromJson(Map<String, dynamic> json)
       : min = json['min'],
         max = json['max'],

@@ -30,6 +30,7 @@ class _ListScreenState extends State<ListScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           int newReceiptIndex = Provider.of<ReceiptList>(context).createReceipt();
+          print('receipt index = $newReceiptIndex');
           Navigator.push(context, MaterialPageRoute(builder: (context) => TimerScreen(index: newReceiptIndex)));
         },
         tooltip: 'Create new receipt',

@@ -1,4 +1,3 @@
-import 'package:blinchiki_app/data/fileIO.dart';
 import 'package:blinchiki_app/models/icon_data_spec.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
@@ -26,7 +25,7 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () {
-            Provider.of<ReceiptList>(context, listen: false).insertReceipt(saveIndex, Receipt.copy(saveReceipt));
+            Provider.of<ReceiptList>(context, listen: false).insertReceipt(saveIndex, saveReceipt.copy());
           },
         ),
       );
@@ -34,7 +33,6 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
 
     return ListView.builder(
       itemBuilder: (context, index) {
-        //final receipt = receiptList.get()[index];
         final receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index);
         return Dismissible(
           key: Key(receipt.name),
@@ -46,7 +44,7 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
               child: SlidableDrawerDismissal(),
               onDismissed: (actionType) {
                 saveIndex = index;
-                saveReceipt = Receipt.copy(receipt);
+                saveReceipt = receipt.copy();
                 setState(() {
                   Provider.of<ReceiptList>(context, listen: false).deleteReceipt(index);
                 });
@@ -101,7 +99,7 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
                   icon: Icons.delete,
                   onTap: () => {
                         saveIndex = index,
-                        saveReceipt = Receipt.copy(receipt),
+                        saveReceipt = receipt.copy(),
                         setState(() {
                           Provider.of<ReceiptList>(context, listen: false).deleteReceipt(index);
                         }),
