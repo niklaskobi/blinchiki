@@ -63,7 +63,7 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TimerScreen(index: index),
+                        builder: (context) => TimerScreen(receiptIndex: index, newReceipt: false),
                       ));
                 },
               ),

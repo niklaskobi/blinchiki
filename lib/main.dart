@@ -31,7 +31,7 @@ class Blinchiki extends StatelessWidget {
         initialRoute: ListScreen.id,
         routes: {
           ListScreen.id: (context) => ListScreen(),
-          TimerScreen.id: (context) => TimerScreen(index: -1),
+          TimerScreen.id: (context) => TimerScreen(receiptIndex: -1, newReceipt: true),
         },
       ),
     );

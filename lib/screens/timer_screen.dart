@@ -1,10 +1,6 @@
-import 'package:blinchiki_app/data/fileIO.dart';
 import 'package:blinchiki_app/models/icon_data_spec.dart';
-import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
-import 'package:blinchiki_app/models/receipt_data.dart';
 import 'package:blinchiki_app/screens/receipt_settings_screen.dart';
-import 'package:blinchiki_app/widgets/timer_painter.dart';
 import 'package:blinchiki_app/widgets/timer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,20 +8,19 @@ import 'package:provider/provider.dart';
 class TimerScreen extends StatefulWidget {
   static const String id = 'timer_screen';
 
-  int _receiptIndex;
+  final int receiptIndex;
+  final bool newReceipt;
 
-  TimerScreen({int index}) {
-    this._receiptIndex = index;
-  }
+  TimerScreen({this.receiptIndex, this.newReceipt});
 
   @override
-  _TimerScreenState createState() => _TimerScreenState();
+  _TimerScreenState createState() {
+    return _TimerScreenState();
+  }
 }
 
 class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin {
   String receiptTitle = '';
-  bool _newReceipt;
-  //Receipt _receipt;
   AnimationController controller;
 
   @override
@@ -37,7 +32,7 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
   void didChangeDependencies() {
     super.didChangeDependencies();
     int duration =
-        Provider.of<ReceiptList>(context, listen: true).getReceiptByIndex(widget._receiptIndex).getOverallSeconds(0);
+        Provider.of<ReceiptList>(context, listen: true).getReceiptByIndex(widget.receiptIndex).getOverallSeconds(0);
     controller = AnimationController(
       vsync: this,
       //duration: Duration(seconds: this._receipt.getOverallSeconds(0)),
@@ -53,11 +48,8 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print(
-        'receipt = ${Provider.of<ReceiptList>(context, listen: true).getReceiptByIndex(widget._receiptIndex).toJson()}');
 
     return Scaffold(
       body: SafeArea(
@@ -73,15 +65,14 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Consumer<ReceiptList>(builder: (context, receiptList, child) {
-                        return Icon(
-                            IconDataSpec.getIconData(receiptList.getReceiptByIndex(widget._receiptIndex).iconId),
+                        return Icon(IconDataSpec.getIconData(receiptList.getReceiptByIndex(widget.receiptIndex).iconId),
                             size: screenWidth * 0.08);
                       }), //TODO: refactor get icon data, move it to receipt
                       SizedBox(width: screenWidth * 0.05),
                       Consumer<ReceiptList>(
                         builder: (context, receiptList, child) {
                           return Text(
-                            receiptList.getReceiptByIndex(widget._receiptIndex).name,
+                            receiptList.getReceiptByIndex(widget.receiptIndex).name,
                             style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.black54),
                           );
                         },
@@ -117,7 +108,7 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
                 ],
               ),
             ),
-            ReceiptSettingsScreen(receiptIndex: widget._receiptIndex),
+            ReceiptSettingsScreen(receiptIndex: widget.receiptIndex, newReceipt: widget.newReceipt),
           ],
         ),
       ),

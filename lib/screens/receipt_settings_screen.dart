@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/models/receipt_data.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,8 +12,9 @@ import 'package:blinchiki_app/widgets/times_column_widget.dart';
 
 class ReceiptSettingsScreen extends StatefulWidget {
   final int receiptIndex;
+  final bool newReceipt;
 
-  ReceiptSettingsScreen({this.receiptIndex});
+  ReceiptSettingsScreen({this.receiptIndex, this.newReceipt});
 
   @override
   _ReceiptSettingsScreenState createState() => _ReceiptSettingsScreenState();
@@ -47,7 +47,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     final double _rowHeight = screenHeight * 0.07;
     final Color _bgColor = Colors.blue[100];
 
-    bool _newReceipt = false;
     myController.text = Provider.of<ReceiptList>(context).getReceiptByIndex(index).name;
 
     /// returns the timer index if turns counter is greater than 1
@@ -133,6 +132,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       iconFunction: null,
       sliderFunction: (double newValue) {
         setState(() {
+          _isSaveButtonActive = true;
           Provider.of<ReceiptList>(context, listen: false).setSteering(index, newValue);
         });
       },
@@ -155,6 +155,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       iconFunction: timerOnTap,
       sliderFunction: (double newValue) {
         setState(() {
+          _isSaveButtonActive = true;
           Provider.of<ReceiptList>(context, listen: false).setMinutes(index, _timerIndex, newValue.round());
         });
       },
@@ -178,6 +179,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       iconFunction: timerOnTap,
       sliderFunction: (double newValue) {
         setState(() {
+          _isSaveButtonActive = true;
           Provider.of<ReceiptList>(context, listen: false).setSeconds(index, _timerIndex, newValue.round());
         });
       },
@@ -198,7 +200,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       ],
     );
 
-    Widget spaceSmall = SizedBox(height: screenHeight * 0.01);
     Widget spaceBig = SizedBox(height: screenHeight * 0.05);
 
     /// header --------------------------------------------------------------------------------------------------------
@@ -222,7 +223,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
           if (isTurnsAvailable)
             Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length - 1}'),
           SizedBox(width: screenWidth * 0.1),
-          if (_isSaveButtonActive)
+          if (_isSaveButtonActive || widget.newReceipt)
             Container(
               width: screenWidth * 0.1,
               child: Material(
@@ -279,7 +280,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
 
     /// main widget ---------------------------------------------------------------------------------------------------
     return DraggableScrollableSheet(
-      initialChildSize: _newReceipt ? _maxChildSize : _minChildSize,
+      initialChildSize: widget.newReceipt ? _maxChildSize : _minChildSize,
       maxChildSize: _maxChildSize,
       minChildSize: _minChildSize,
       builder: (BuildContext context, ScrollController scrollController) {
