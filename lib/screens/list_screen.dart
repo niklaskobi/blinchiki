@@ -45,6 +45,7 @@ class _ListScreenState extends State<ListScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      /*
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         child: new Row(
@@ -61,6 +62,7 @@ class _ListScreenState extends State<ListScreen> {
           ],
         ),
       ),
+       */
     );
   }
 }

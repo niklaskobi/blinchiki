@@ -235,8 +235,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
                     icon: Icon(Icons.save),
                     color: Colors.black,
                     onPressed: () async {
-                      print('Save Button Pressed');
-                      //Provider.of<ReceiptList>(context).addReceipt(Receipt.copy(_receipt));
                       await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
                     },
                   ))),

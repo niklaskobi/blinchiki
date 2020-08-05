@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blinchiki_app/data/fileIO.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:flutter/foundation.dart';
 import 'receipt_data.dart';
@@ -22,8 +23,16 @@ class ReceiptList extends ChangeNotifier {
   void initFromJson(Map<String, dynamic> json) => this._list = receiptsFromJson(json['receiptList']);
 
   /// add receipt
-  void addReceipt(Receipt r) {
+  void addReceipt(Receipt r) async {
     _list.add(r);
+    await FileIO().writeString(jsonEncode(toJson()));
+    notifyListeners();
+  }
+
+  /// insert receipt
+  void insertReceipt(int index, Receipt r) async {
+    _list.insert(index, r);
+    await FileIO().writeString(jsonEncode(toJson()));
     notifyListeners();
   }
 
@@ -36,7 +45,7 @@ class ReceiptList extends ChangeNotifier {
   /// getter by index
   Receipt getReceiptByIndex(int index) => _list[index];
 
-  /// get active receipt name
+  /// get receipt on index name
   String getName(int index) => this._list[index].name;
 
   /*
@@ -84,8 +93,10 @@ class ReceiptList extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteReceipt(int index) {
+  void deleteReceipt(int index) async {
     this._list.removeAt(index);
+    await FileIO().writeString(jsonEncode(toJson()));
+    notifyListeners();
   }
 
   Map<String, dynamic> toJson() {
