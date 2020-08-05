@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:blinchiki_app/models/receipt_list.dart';
 
 class MyTableRow {
   static TableRow createTableRow({
@@ -16,6 +14,7 @@ class MyTableRow {
     double sliderValue,
     Function iconFunction,
     Function sliderFunction,
+    Function onChangeEndFunction,
     BuildContext context,
   }) {
     return TableRow(
@@ -55,6 +54,9 @@ class MyTableRow {
                 max: max,
                 onChanged: (double newValue) {
                   sliderFunction(newValue);
+                },
+                onChangeEnd: (double newValue) {
+                  onChangeEndFunction();
                 },
               ),
             ),

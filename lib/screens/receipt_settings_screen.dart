@@ -31,7 +31,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
 
   /// vars -------------------------------------------------
   int _timerIndex = 0;
-  bool _isSaveButtonActive = false;
 
   @override
   void dispose() {
@@ -48,6 +47,11 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     final Color _bgColor = Colors.blue[100];
 
     myController.text = Provider.of<ReceiptList>(context).getReceiptByIndex(index).name;
+
+    /// write receipt list to the device's storage
+    void writeReceiptsToDevice() async {
+      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
+    }
 
     /// returns the timer index if turns counter is greater than 1
     String getTimerIndexStr() {
@@ -77,8 +81,10 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       if (value + 1 > durations) {
         //TODO: not sure whether i need a loop here, or a single increment is enough
         Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).addNewDuration();
+        writeReceiptsToDevice();
       } else if (value + 1 < durations) {
         Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).removeDuration();
+        writeReceiptsToDevice();
         /*
         for (var i = 1; i < durations - value; i++) {
           Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).removeDuration();
@@ -107,13 +113,10 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       iconFunction: null,
       sliderFunction: (double value) {
         setState(() {
-          _isSaveButtonActive = true;
           updateAmountOfTurns(value.toInt());
-          // Provider.of<ReceiptList>(context, listen: false).setTurns(index, value.toInt());
-          // set timer index to max turns value
-          //_timerIndex = _timerIndex > value - 1 ? _timerIndex = value.toInt() - 1 : _timerIndex;
         });
       },
+      onChangeEndFunction: () {},
       context: context,
     );
 
@@ -132,10 +135,10 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       iconFunction: null,
       sliderFunction: (double newValue) {
         setState(() {
-          _isSaveButtonActive = true;
           Provider.of<ReceiptList>(context, listen: false).setSteering(index, newValue);
         });
       },
+      onChangeEndFunction: writeReceiptsToDevice,
       context: context,
     );
 
@@ -155,10 +158,10 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       iconFunction: timerOnTap,
       sliderFunction: (double newValue) {
         setState(() {
-          _isSaveButtonActive = true;
           Provider.of<ReceiptList>(context, listen: false).setMinutes(index, _timerIndex, newValue.round());
         });
       },
+      onChangeEndFunction: writeReceiptsToDevice,
       context: context,
     );
 
@@ -179,10 +182,10 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       iconFunction: timerOnTap,
       sliderFunction: (double newValue) {
         setState(() {
-          _isSaveButtonActive = true;
           Provider.of<ReceiptList>(context, listen: false).setSeconds(index, _timerIndex, newValue.round());
         });
       },
+      onChangeEndFunction: writeReceiptsToDevice,
       context: context,
     );
 
@@ -223,23 +226,24 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
           if (isTurnsAvailable)
             Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length - 1}'),
           SizedBox(width: screenWidth * 0.1),
-          if (_isSaveButtonActive || widget.newReceipt)
-            Container(
-              width: screenWidth * 0.1,
-              child: Material(
-                  shape: CircleBorder(),
-                  color: Colors.white,
-                  elevation: 1,
-                  child: Ink(
-                      //decoration: const ShapeDecoration(shape: CircleBorder(), color: Colors.lightBlueAccent),
-                      child: IconButton(
-                    icon: Icon(Icons.save),
-                    color: Colors.black,
-                    onPressed: () async {
-                      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
-                    },
-                  ))),
-            )
+          /*
+          Container(
+            width: screenWidth * 0.1,
+            child: Material(
+                shape: CircleBorder(),
+                color: Colors.white,
+                elevation: 1,
+                child: Ink(
+                    //decoration: const ShapeDecoration(shape: CircleBorder(), color: Colors.lightBlueAccent),
+                    child: IconButton(
+                  icon: Icon(Icons.save),
+                  color: Colors.black,
+                  onPressed: () async {
+                    await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
+                  },
+                ))),
+          )
+           */
         ],
       ),
     );
