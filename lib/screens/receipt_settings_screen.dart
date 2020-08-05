@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blinchiki_app/models/duration.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/models/receipt_data.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
 
   /// vars -------------------------------------------------
   int _timerIndex = 0;
+  Map saveDurationsMap = new Map<int, MyDuration>();
 
   @override
   void dispose() {
@@ -79,17 +81,19 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       int durations = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length;
       // increment turns amount
       if (value + 1 > durations) {
+        // try to use previous value
+        MyDuration newDuration =
+            saveDurationsMap.containsKey(value) ? saveDurationsMap[value] : MyDuration(minutes: 0, seconds: 0);
         //TODO: not sure whether i need a loop here, or a single increment is enough
-        Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).addNewDuration();
+        Provider.of<ReceiptList>(context, listen: false).addNewDuration(index, newDuration);
         writeReceiptsToDevice();
       } else if (value + 1 < durations) {
+        // save previous value
+        saveDurationsMap[value + 1] =
+            Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).getDuration(value + 1);
+        print(saveDurationsMap.toString());
         Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).removeDuration();
         writeReceiptsToDevice();
-        /*
-        for (var i = 1; i < durations - value; i++) {
-          Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).removeDuration();
-        }
-         */
       }
     }
 

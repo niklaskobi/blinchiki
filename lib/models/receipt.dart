@@ -34,8 +34,9 @@ class Receipt {
   /// duration
   getDurationStr(int index) => this._durations[index].toString();
   getDurationAmount() => this._durations.length;
-  addNewDuration() => this._durations.add(MyDuration(minutes: 0, seconds: 0));
+  addNewDuration(MyDuration newDuration) => this._durations.add(newDuration);
   removeDuration() => this._durations.removeLast();
+  getDuration(int index) => this._durations[index];
   List<MyDuration> get durations => this._durations;
 
   /// minutes

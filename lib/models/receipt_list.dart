@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blinchiki_app/data/fileIO.dart';
+import 'package:blinchiki_app/models/duration.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:flutter/foundation.dart';
 import 'receipt_data.dart';
@@ -54,8 +55,8 @@ class ReceiptList extends ChangeNotifier {
    */
 
   /// add new Duration
-  void addNewDuration(int index) {
-    this._list[index].addNewDuration();
+  void addNewDuration(int index, MyDuration newDuration) {
+    this._list[index].addNewDuration(newDuration);
     notifyListeners();
   }
 
