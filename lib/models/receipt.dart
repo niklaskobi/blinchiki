@@ -10,7 +10,7 @@ class Receipt {
   int _iconId;
   int _stoveId;
   int _activeBurnerIndex;
-  int _turns;
+  //int _turns;
   SteeringSetting _steeringSetting;
 
   /// constructor
@@ -27,14 +27,15 @@ class Receipt {
     this._iconId = iconId;
     this._stoveId = stoveId;
     this._activeBurnerIndex = activeBurnerIndex;
-    this._turns = turns;
+    //this._turns = turns;
     this._steeringSetting = steeringSetting;
   }
 
   /// duration
   getDurationStr(int index) => this._durations[index].toString();
   getDurationAmount() => this._durations.length;
-  addNewDuration() => this._durations.add(ReceiptData.zeroDuration);
+  addNewDuration() => this._durations.add(MyDuration(minutes: 0, seconds: 0));
+  removeDuration() => this._durations.removeLast();
   List<MyDuration> get durations => this._durations;
 
   /// minutes
@@ -56,9 +57,11 @@ class Receipt {
   /// icon
   int get iconId => this._iconId;
 
+  /*
   /// turns
   int get turns => this._turns == null ? 0 : this._turns;
   setTurns(int t) => this._turns = t;
+   */
 
   /// parse Duration list
   static List<MyDuration> durationsFromJson(String json) =>
@@ -71,7 +74,7 @@ class Receipt {
         _iconId = json['iconId'],
         _stoveId = json['stoveId'],
         _activeBurnerIndex = json['activeBurnerIndex'],
-        _turns = json['turns'],
+        //_turns = json['turns'],
         _steeringSetting = SteeringSetting.fromJson(jsonDecode(json['steeringSetting']));
 
   /// serialization
@@ -81,7 +84,7 @@ class Receipt {
         'iconId': _iconId,
         'stoveId': _stoveId,
         'activeBurnerIndex': _activeBurnerIndex,
-        'turns': _turns,
+        //'turns': _turns,
         'steeringSetting': jsonEncode(_steeringSetting)
       };
 
@@ -93,7 +96,7 @@ class Receipt {
         iconId: o._iconId,
         stoveId: o._stoveId,
         activeBurnerIndex: o._activeBurnerIndex,
-        turns: o._turns,
+        //turns: o._turns,
         steeringSetting: o._steeringSetting);
   }
 }

@@ -31,6 +31,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
 
   /// vars -------------------------------------------------
   int _timerIndex = 0;
+  bool _isSaveButtonActive = false;
 
   @override
   void dispose() {
@@ -51,8 +52,8 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
 
     /// returns the timer index if turns counter is greater than 1
     String getTimerIndexStr() {
-      int turns = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns;
-      if (turns > 0)
+      int durations = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length;
+      if (durations > 1)
         return '${_timerIndex + 1}.';
       else
         return '';
@@ -60,40 +61,56 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
 
     /// increment the turns index when pressing on the timer icon
     void timerOnTap() {
+      print(Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations);
       setState(() {
-        if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 0) {
-          _timerIndex = rotatingIncrement(
-              this._timerIndex, 0, Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns);
+        if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length > 1) {
+          _timerIndex = rotatingIncrement(this._timerIndex, 0,
+              Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length - 1);
         }
       });
     }
 
     void updateAmountOfTurns(int value) {
+      // set timer index to max turns value
+      _timerIndex = _timerIndex > value - 1 ? _timerIndex = value.toInt() : _timerIndex;
+      int durations = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length;
       // increment turns amount
-      if (value > Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns) {
+      if (value + 1 > durations) {
+        //TODO: not sure whether i need a loop here, or a single increment is enough
         Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).addNewDuration();
-      } else if (value < Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns) {
-        //TODO: mark durations to be deleted
+      } else if (value + 1 < durations) {
+        Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).removeDuration();
+        /*
+        for (var i = 1; i < durations - value; i++) {
+          Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).removeDuration();
+        }
+         */
       }
     }
+
+    /// whether turns icon must be shown or not
+    bool isTurnsAvailable =
+        Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length > 1;
 
     /// turns row ----------------------------------------------------------------------------------------------------
     TableRow turnsRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
       text1: '',
       text2: '',
-      text3: '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns}',
+      text3: '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length - 1}',
       iconData: _turnsIcon,
       index: index,
       divisions: ReceiptData.maxDurationAmount - 1,
       min: 0.0,
       max: ReceiptData.maxDurationAmount.toDouble() - 1,
-      sliderValue: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns.toDouble(),
+      sliderValue:
+          Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length.toDouble() - 1,
       iconFunction: null,
       sliderFunction: (double value) {
         setState(() {
+          _isSaveButtonActive = true;
           updateAmountOfTurns(value.toInt());
-          Provider.of<ReceiptList>(context, listen: false).setTurns(index, value.toInt());
+          // Provider.of<ReceiptList>(context, listen: false).setTurns(index, value.toInt());
           // set timer index to max turns value
           //_timerIndex = _timerIndex > value - 1 ? _timerIndex = value.toInt() - 1 : _timerIndex;
         });
@@ -185,41 +202,47 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     Widget spaceBig = SizedBox(height: screenHeight * 0.05);
 
     /// header --------------------------------------------------------------------------------------------------------
-    Widget headerTile = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(_timerIcon),
-        TimesColumnWidget(
-            durations: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations,
-            activeIndex: this._timerIndex),
-        SizedBox(width: screenWidth * 0.03),
-        Icon(_fireIcon),
-        Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value}'),
-        if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 0)
+    Widget headerTile = Container(
+      height: screenHeight * 0.1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(_timerIcon),
+            onPressed: timerOnTap,
+          ),
+          TimesColumnWidget(
+              durations: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations,
+              activeIndex: this._timerIndex),
           SizedBox(width: screenWidth * 0.03),
-        if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 0) Icon(_turnsIcon),
-        if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns > 0)
-          Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).turns}'),
-        SizedBox(width: screenWidth * 0.1),
-        Container(
-          width: screenWidth * 0.1,
-          child: Material(
-              shape: CircleBorder(),
-              color: Colors.white,
-              elevation: 1,
-              child: Ink(
-                  //decoration: const ShapeDecoration(shape: CircleBorder(), color: Colors.lightBlueAccent),
-                  child: IconButton(
-                icon: Icon(Icons.save),
-                color: Colors.black,
-                onPressed: () async {
-                  print('Save Button Pressed');
-                  //Provider.of<ReceiptList>(context).addReceipt(Receipt.copy(_receipt));
-                  await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
-                },
-              ))),
-        )
-      ],
+          Icon(_fireIcon),
+          Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value}'),
+          if (isTurnsAvailable) SizedBox(width: screenWidth * 0.03),
+          if (isTurnsAvailable) Icon(_turnsIcon),
+          if (isTurnsAvailable)
+            Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length - 1}'),
+          SizedBox(width: screenWidth * 0.1),
+          if (_isSaveButtonActive)
+            Container(
+              width: screenWidth * 0.1,
+              child: Material(
+                  shape: CircleBorder(),
+                  color: Colors.white,
+                  elevation: 1,
+                  child: Ink(
+                      //decoration: const ShapeDecoration(shape: CircleBorder(), color: Colors.lightBlueAccent),
+                      child: IconButton(
+                    icon: Icon(Icons.save),
+                    color: Colors.black,
+                    onPressed: () async {
+                      print('Save Button Pressed');
+                      //Provider.of<ReceiptList>(context).addReceipt(Receipt.copy(_receipt));
+                      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
+                    },
+                  ))),
+            )
+        ],
+      ),
     );
 
     /// text field ----------------------------------------------------------------------------------------------------
@@ -254,7 +277,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       ),
     );
 
-    List<Widget> draggableItems = [draggableLogo, spaceSmall, headerTile, spaceBig, textField, table];
+    List<Widget> draggableItems = [draggableLogo, headerTile, spaceBig, textField, table];
 
     /// main widget ---------------------------------------------------------------------------------------------------
     return DraggableScrollableSheet(

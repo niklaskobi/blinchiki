@@ -39,8 +39,10 @@ class ReceiptList extends ChangeNotifier {
   /// get active receipt name
   String getName(int index) => this._list[index].name;
 
+  /*
   /// set turns on index
   void setTurns(int index, int t) => this._list[index].setTurns(t);
+   */
 
   /// add new Duration
   void addNewDuration(int index) {

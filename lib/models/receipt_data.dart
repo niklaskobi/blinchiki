@@ -10,7 +10,7 @@ class ReceiptData extends ChangeNotifier {
   static int maxDurationAmount = 4;
   static SteeringSetting defaultSteering = SteeringSetting(min: 0, max: 3, step: 0.5, value: 2, steeringId: 1);
   static MyDuration defaultDuration = MyDuration(minutes: 1, seconds: 20);
-  static MyDuration zeroDuration = MyDuration(minutes: 0, seconds: 0);
+  //static MyDuration zeroDuration = MyDuration(minutes: 0, seconds: 0);
   static Receipt defaultReceipt = Receipt(
       name: '?',
       durations: [defaultDuration],
