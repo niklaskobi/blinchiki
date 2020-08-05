@@ -255,11 +255,16 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
         initialValue: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).name,
         autofocus: false,
         textAlign: TextAlign.center,
-        decoration: InputDecoration(hintText: "enter receipt name"),
-        onChanged: (newText) {
+        decoration: InputDecoration(hintText: "Enter receipt name"),
+        onChanged: (newText) {},
+        onSaved: (newText) {
+          print('onSaved');
+        },
+        onFieldSubmitted: (newText) {
           setState(() {
             //update name through receipt_data and receiver
             Provider.of<ReceiptList>(context, listen: false).setName(index, newText);
+            writeReceiptsToDevice();
           });
         },
       ),
