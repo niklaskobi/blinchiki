@@ -2,10 +2,12 @@ import 'package:blinchiki_app/models/icon_data_spec.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/screens/timer_screen.dart';
+import 'package:blinchiki_app/widgets/receipt_card_widget.dart';
 import 'package:blinchiki_app/widgets/receipt_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:blinchiki_app/data/constants.dart';
 
 class ReceiptListWidget extends StatefulWidget {
   @override
@@ -56,10 +58,10 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
               actionPane: SlidableDrawerActionPane(),
               actionExtentRatio: 0.25,
               child: Container(
-                color: Colors.white,
-                child: ReceiptTileWidget(
+                color: kBackgroundWhite,
+                child: ReceiptCardWidget(
                   iconData: IconDataSpec.getIconData(receipt.iconId),
-                  receiptTitle: receipt.name,
+                  receipt: receipt,
                   shortPressCallback: () {
                     Navigator.push(
                         context,
@@ -96,7 +98,7 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
                  */
                 IconSlideAction(
                     caption: 'Delete',
-                    color: Colors.red,
+                    color: kBackgroundWhite,
                     icon: Icons.delete,
                     onTap: () => {
                           saveIndex = index,

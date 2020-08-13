@@ -24,6 +24,8 @@ class ReceiptTileWidget extends StatelessWidget {
         receiptTitle,
         style: TextStyle(color: Colors.black),
       ),
+      subtitle: Text('Subtitle'),
+      trailing: Text('Trailing'),
     );
   }
 }

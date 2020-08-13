@@ -4,6 +4,7 @@ import 'package:blinchiki_app/screens/timer_screen.dart';
 import 'package:blinchiki_app/widgets/receipt_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:blinchiki_app/data/constants.dart';
 
 class ListScreen extends StatefulWidget {
   static const String id = 'list_screen';
@@ -41,6 +42,7 @@ class _ListScreenState extends State<ListScreen> {
         children: <Widget>[
           Expanded(
             child: Container(
+              color: kBackgroundWhite,
               child: ReceiptListWidget(),
             ),
           ),
