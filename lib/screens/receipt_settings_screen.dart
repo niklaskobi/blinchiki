@@ -4,12 +4,12 @@ import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/models/receipt_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:blinchiki_app/data/fileIO.dart';
 import 'package:provider/provider.dart';
 import 'package:blinchiki_app/functions/common.dart';
 import 'package:blinchiki_app/widgets/table_row.dart';
 import 'package:blinchiki_app/widgets/times_column_widget.dart';
+import 'package:blinchiki_app/data/constants.dart';
 
 class ReceiptSettingsScreen extends StatefulWidget {
   final int receiptIndex;
@@ -23,9 +23,6 @@ class ReceiptSettingsScreen extends StatefulWidget {
 
 class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
   /// statics ----------------------------------------------
-  static IconData _fireIcon = FontAwesomeIcons.fire;
-  static IconData _timerIcon = Icons.timer;
-  static IconData _turnsIcon = Icons.repeat;
   static double _maxChildSize = 0.6;
   static double _minChildSize = 0.15;
   final myController = TextEditingController();
@@ -66,7 +63,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
 
     /// increment the turns index when pressing on the timer icon
     void timerOnTap() {
-      print(Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations);
       setState(() {
         if (Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length > 1) {
           _timerIndex = rotatingIncrement(this._timerIndex, 0,
@@ -107,7 +103,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       text1: '',
       text2: '',
       text3: '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length - 1}',
-      iconData: _turnsIcon,
+      iconData: kTurnsIcon,
       index: index,
       divisions: ReceiptData.maxDurationAmount - 1,
       min: 0.0,
@@ -130,7 +126,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       text1: '',
       text2: '',
       text3: '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value}',
-      iconData: _fireIcon,
+      iconData: kFireIcon,
       index: index,
       divisions: 12,
       min: 0.0,
@@ -152,7 +148,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       text1: '${getTimerIndexStr()}',
       text2: '\'',
       text3: '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).getMinutes(_timerIndex)} \'',
-      iconData: _timerIcon,
+      iconData: kTimerIcon,
       index: index,
       divisions: 30,
       min: 0.0,
@@ -176,7 +172,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       text2: '\'\'',
       text3:
           '${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).getSeconds(_timerIndex)} \'\'',
-      iconData: _timerIcon,
+      iconData: kTimerIcon,
       index: index,
       divisions: 11,
       min: 0.0,
@@ -216,17 +212,17 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           IconButton(
-            icon: Icon(_timerIcon),
+            icon: Icon(kTimerIcon),
             onPressed: timerOnTap,
           ),
           TimesColumnWidget(
               durations: Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations,
               activeIndex: this._timerIndex),
           SizedBox(width: screenWidth * 0.03),
-          Icon(_fireIcon),
+          Icon(kFireIcon),
           Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).steeringSetting.value}'),
           if (isTurnsAvailable) SizedBox(width: screenWidth * 0.03),
-          if (isTurnsAvailable) Icon(_turnsIcon),
+          if (isTurnsAvailable) Icon(kTurnsIcon),
           if (isTurnsAvailable)
             Text('${Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index).durations.length - 1}'),
           SizedBox(width: screenWidth * 0.1),
