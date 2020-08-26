@@ -133,9 +133,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// turns row ----------------------------------------------------------------------------------------------------
     TableRow turnsRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
-      text1: '',
-      text2: '',
-      text3: '${receipt.durations.length - 1}',
+      text: '${receipt.durations.length - 1}',
       iconData: kTurnsIcon,
       index: index,
       iconFunction: null,
@@ -157,9 +155,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// steering row --------------------------------------------------------------------------------------------------
     TableRow steeringRow = MyTableRow.createTableRow(
         rowHeight: _rowHeight,
-        text1: '',
-        text2: '',
-        text3: '${receipt.steeringSetting.value}',
+        text: '${receipt.steeringSetting.value}',
         iconData: kFireIcon,
         index: index,
         iconFunction: null,
@@ -180,9 +176,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// minutes row ---------------------------------------------------------------------------------------------------
     TableRow minutesRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
-      text1: '${getTimerIndexStr()}',
-      text2: '\'',
-      text3: '${receipt.getMinutes(_timerIndex)} \'',
+      text: '${receipt.getMinutes(_timerIndex)} \'',
       iconData: kTimerIcon,
       index: index,
       iconFunction: timerOnTap,
@@ -204,9 +198,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// seconds row ---------------------------------------------------------------------------------------------------
     TableRow secondsRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
-      text1: '${getTimerIndexStr()}',
-      text2: '\'\'',
-      text3: '${receipt.getSeconds(_timerIndex)} \'\'',
+      text: '${receipt.getSeconds(_timerIndex)} \'\'',
       iconData: kTimerIcon,
       index: index,
       iconFunction: timerOnTap,
@@ -309,9 +301,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// seconds row ---------------------------------------------------------------------------------------------------
     TableRow textFieldRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
-      text1: '',
-      text2: '',
-      text3: '',
+      text: '',
       iconData: iconDataSpec.getIconData(receipt.iconId),
       index: index,
       iconFunction: () async {
@@ -326,11 +316,9 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: Table(
         columnWidths: {
-          0: FractionColumnWidth(0.03),
-          1: FractionColumnWidth(0.12),
-          2: FractionColumnWidth(0.02),
-          3: FractionColumnWidth(0.68),
-          4: FractionColumnWidth(0.15),
+          0: FractionColumnWidth(0.15),
+          1: FractionColumnWidth(0.7),
+          2: FractionColumnWidth(0.15),
         },
         children: [textFieldRow, minutesRow, secondsRow, steeringRow, turnsRow],
       ),
