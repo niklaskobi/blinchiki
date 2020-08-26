@@ -75,6 +75,22 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       });
     }
 
+    void increaseDurationIndex() {
+      setState(() {
+        if (receipt.durations.length > 1) {
+          _timerIndex = increaseWithBoundary(this._timerIndex, receipt.durations.length - 1);
+        }
+      });
+    }
+
+    void decreaseDurationIndex() {
+      setState(() {
+        if (receipt.durations.length > 1) {
+          _timerIndex = decreaseWithBoundary(this._timerIndex, 0);
+        }
+      });
+    }
+
     void updateAmountOfTurns(int value) {
       // set timer index to max turns value
       _timerIndex = _timerIndex > value - 1 ? _timerIndex = value.toInt() : _timerIndex;
@@ -179,7 +195,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       text: '${receipt.getMinutes(_timerIndex)} \'',
       iconData: kTimerIcon,
       index: index,
-      iconFunction: timerOnTap,
+      iconFunction: decreaseDurationIndex,
       context: context,
       widget: sliderWidget(
           rowHeight: _rowHeight,
@@ -201,7 +217,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       text: '${receipt.getSeconds(_timerIndex)} \'\'',
       iconData: kTimerIcon,
       index: index,
-      iconFunction: timerOnTap,
+      iconFunction: increaseDurationIndex,
       context: context,
       widget: sliderWidget(
           rowHeight: _rowHeight,
