@@ -54,28 +54,34 @@ class ReceiptList extends ChangeNotifier {
   void setTurns(int index, int t) => this._list[index].setTurns(t);
    */
 
-  /// add new Duration
+  /// duration
   void addNewDuration(int index, MyDuration newDuration) {
     this._list[index].addNewDuration(newDuration);
     notifyListeners();
   }
 
-  /// set steering on index
+  /// icon
+  void setIconId(int index, int iconId) {
+    this._list[index].iconId = iconId;
+    notifyListeners();
+  }
+
+  /// steering
   void setSteering(int index, double s) => this._list[index].steeringSetting.value = s;
 
-  /// set seconds on index
+  /// seconds
   void setSeconds(int index, int timerIndex, int s) {
     this._list[index].setSeconds(timerIndex, s);
     notifyListeners();
   }
 
-  /// set minutes on index
+  /// minutes
   void setMinutes(int index, int timerIndex, int s) {
     this._list[index].setMinutes(timerIndex, s);
     notifyListeners();
   }
 
-  /// set name on index
+  /// name
   void setName(int index, String name) {
     this._list[index].name = name;
     notifyListeners();

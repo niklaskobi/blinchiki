@@ -57,6 +57,7 @@ class Receipt {
 
   /// icon
   int get iconId => this._iconId;
+  set iconId(int id) => this._iconId = id;
 
   /*
   /// turns

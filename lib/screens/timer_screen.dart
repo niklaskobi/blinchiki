@@ -50,6 +50,7 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    IconDataSpec iconDataSpec = IconDataSpec();
 
     return Scaffold(
       body: SafeArea(
@@ -65,7 +66,7 @@ class _TimerScreenState extends State<TimerScreen> with TickerProviderStateMixin
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Consumer<ReceiptList>(builder: (context, receiptList, child) {
-                        return Icon(IconDataSpec.getIconData(receiptList.getReceiptByIndex(widget.receiptIndex).iconId),
+                        return Icon(iconDataSpec.getIconData(receiptList.getReceiptByIndex(widget.receiptIndex).iconId),
                             size: screenWidth * 0.08);
                       }), //TODO: refactor get icon data, move it to receipt
                       SizedBox(width: screenWidth * 0.05),

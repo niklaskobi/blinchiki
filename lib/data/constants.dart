@@ -16,6 +16,10 @@ const Color kReceiptCardIconTileBackground = Color(0xFFeeeeee);
 const Color kReceiptCardTitle = Color(0xFF212121);
 const Color kReceiptCardDescription = Color(0xFF9e9e9e);
 
+/// Colors - Icon Selection
+const Color kIconSelectionIconBgNonActive = kReceiptCardBackground;
+const Color kIconSelectionIconBgActive = kReceiptCardDescription;
+
 /*
 100% — FF
  95% — F2

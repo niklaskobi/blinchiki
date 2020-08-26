@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 class IconSpec {
   IconData iconData;
   int groupId;
+  int id;
 
-  IconSpec({this.iconData, this.groupId});
+  IconSpec({@required this.iconData, @required this.groupId, @required this.id});
 }

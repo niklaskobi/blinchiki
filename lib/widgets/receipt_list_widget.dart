@@ -3,7 +3,6 @@ import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/screens/timer_screen.dart';
 import 'package:blinchiki_app/widgets/receipt_card_widget.dart';
-import 'package:blinchiki_app/widgets/receipt_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -17,6 +16,7 @@ class ReceiptListWidget extends StatefulWidget {
 class _ReceiptListWidgetState extends State<ReceiptListWidget> {
   Receipt saveReceipt;
   int saveIndex;
+  IconDataSpec iconDataSpec = IconDataSpec();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
               child: Container(
                 color: kBackgroundWhite,
                 child: ReceiptCardWidget(
-                  iconData: IconDataSpec.getIconData(receipt.iconId),
+                  iconData: iconDataSpec.getIconData(receipt.iconId),
                   receipt: receipt,
                   shortPressCallback: () {
                     Navigator.push(
