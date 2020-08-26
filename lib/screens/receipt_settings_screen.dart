@@ -99,6 +99,37 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// whether turns icon must be shown or not
     bool isTurnsAvailable = receipt.durations.length > 1;
 
+    Widget sliderWidget(
+        {double rowHeight,
+        double sliderValue,
+        int divisions,
+        double min,
+        double max,
+        Function sliderFunction,
+        Function onChangeEndFunction}) {
+      return SliderTheme(
+        data: SliderTheme.of(context),
+        child: Container(
+          height: rowHeight,
+          child: Align(
+            alignment: Alignment.center,
+            child: Slider(
+              value: sliderValue,
+              divisions: divisions,
+              min: min,
+              max: max,
+              onChanged: (double newValue) {
+                sliderFunction(newValue);
+              },
+              onChangeEnd: (double newValue) {
+                onChangeEndFunction();
+              },
+            ),
+          ),
+        ),
+      );
+    }
+
     /// turns row ----------------------------------------------------------------------------------------------------
     TableRow turnsRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
@@ -107,41 +138,44 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       text3: '${receipt.durations.length - 1}',
       iconData: kTurnsIcon,
       index: index,
-      divisions: ReceiptData.maxDurationAmount - 1,
-      min: 0.0,
-      max: ReceiptData.maxDurationAmount.toDouble() - 1,
-      sliderValue: receipt.durations.length.toDouble() - 1,
       iconFunction: null,
-      sliderFunction: (double value) {
-        setState(() {
-          updateAmountOfTurns(value.toInt());
-        });
-      },
-      onChangeEndFunction: () {},
       context: context,
+      widget: sliderWidget(
+          rowHeight: _rowHeight,
+          divisions: ReceiptData.maxDurationAmount - 1,
+          min: 0.0,
+          max: ReceiptData.maxDurationAmount.toDouble() - 1,
+          sliderValue: receipt.durations.length.toDouble() - 1,
+          sliderFunction: (double value) {
+            setState(() {
+              updateAmountOfTurns(value.toInt());
+            });
+          },
+          onChangeEndFunction: () {}),
     );
 
     /// steering row --------------------------------------------------------------------------------------------------
     TableRow steeringRow = MyTableRow.createTableRow(
-      rowHeight: _rowHeight,
-      text1: '',
-      text2: '',
-      text3: '${receipt.steeringSetting.value}',
-      iconData: kFireIcon,
-      index: index,
-      divisions: 12,
-      min: 0.0,
-      max: 60.0,
-      sliderValue: receipt.steeringSetting.value,
-      iconFunction: null,
-      sliderFunction: (double newValue) {
-        setState(() {
-          Provider.of<ReceiptList>(context, listen: false).setSteering(index, newValue);
-        });
-      },
-      onChangeEndFunction: writeReceiptsToDevice,
-      context: context,
-    );
+        rowHeight: _rowHeight,
+        text1: '',
+        text2: '',
+        text3: '${receipt.steeringSetting.value}',
+        iconData: kFireIcon,
+        index: index,
+        iconFunction: null,
+        context: context,
+        widget: sliderWidget(
+            rowHeight: _rowHeight,
+            divisions: 12,
+            min: 0.0,
+            max: 60.0,
+            sliderValue: receipt.steeringSetting.value,
+            sliderFunction: (double newValue) {
+              setState(() {
+                Provider.of<ReceiptList>(context, listen: false).setSteering(index, newValue);
+              });
+            },
+            onChangeEndFunction: writeReceiptsToDevice));
 
     /// minutes row ---------------------------------------------------------------------------------------------------
     TableRow minutesRow = MyTableRow.createTableRow(
@@ -151,18 +185,20 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       text3: '${receipt.getMinutes(_timerIndex)} \'',
       iconData: kTimerIcon,
       index: index,
-      divisions: 30,
-      min: 0.0,
-      max: 30.0,
-      sliderValue: receipt.getMinutes(_timerIndex).toDouble(),
       iconFunction: timerOnTap,
-      sliderFunction: (double newValue) {
-        setState(() {
-          Provider.of<ReceiptList>(context, listen: false).setMinutes(index, _timerIndex, newValue.round());
-        });
-      },
-      onChangeEndFunction: writeReceiptsToDevice,
       context: context,
+      widget: sliderWidget(
+          rowHeight: _rowHeight,
+          divisions: 30,
+          min: 0.0,
+          max: 30.0,
+          sliderValue: receipt.getMinutes(_timerIndex).toDouble(),
+          sliderFunction: (double newValue) {
+            setState(() {
+              Provider.of<ReceiptList>(context, listen: false).setMinutes(index, _timerIndex, newValue.round());
+            });
+          },
+          onChangeEndFunction: writeReceiptsToDevice),
     );
 
     /// seconds row ---------------------------------------------------------------------------------------------------
@@ -173,18 +209,20 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       text3: '${receipt.getSeconds(_timerIndex)} \'\'',
       iconData: kTimerIcon,
       index: index,
-      divisions: 11,
-      min: 0.0,
-      max: 55.0,
-      sliderValue: receipt.getSeconds(_timerIndex).toDouble(),
       iconFunction: timerOnTap,
-      sliderFunction: (double newValue) {
-        setState(() {
-          Provider.of<ReceiptList>(context, listen: false).setSeconds(index, _timerIndex, newValue.round());
-        });
-      },
-      onChangeEndFunction: writeReceiptsToDevice,
       context: context,
+      widget: sliderWidget(
+          rowHeight: _rowHeight,
+          divisions: 11,
+          min: 0.0,
+          max: 55.0,
+          sliderValue: receipt.getSeconds(_timerIndex).toDouble(),
+          sliderFunction: (double newValue) {
+            setState(() {
+              Provider.of<ReceiptList>(context, listen: false).setSeconds(index, _timerIndex, newValue.round());
+            });
+          },
+          onChangeEndFunction: writeReceiptsToDevice),
     );
 
     /// draggable logo ( - ) ------------------------------------------------------------------------------------------
@@ -245,37 +283,43 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
 
     /// text field ----------------------------------------------------------------------------------------------------
     Widget textField = Container(
-        padding: EdgeInsets.only(left: screenWidth * 0.15, right: screenWidth * 0.15),
-        child: Column(children: <Widget>[
-          Container(
-            child: IconButton(
-                icon: Icon(iconDataSpec.getIconData(receipt.iconId)),
-                onPressed: () async {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => IconSelectScreen(activeReceiptIndex: index)));
-                }),
-          ),
-          Container(
-            //padding: EdgeInsets.only(left: screenWidth * 0.15, right: screenWidth * 0.15),
-            child: TextFormField(
-              initialValue: receipt.name,
-              autofocus: false,
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(hintText: "Enter receipt name"),
-              onChanged: (newText) {},
-              onSaved: (newText) {
-                print('onSaved');
-              },
-              onFieldSubmitted: (newText) {
-                setState(() {
-                  //update name through receipt_data and receiver
-                  Provider.of<ReceiptList>(context, listen: false).setName(index, newText);
-                  writeReceiptsToDevice();
-                });
-              },
-            ),
-          ),
-        ]));
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+      child: Container(
+        //padding: EdgeInsets.only(left: screenWidth * 0.15, right: screenWidth * 0.15),
+        child: TextFormField(
+          initialValue: receipt.name,
+          autofocus: false,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(hintText: "Enter receipt name"),
+          onChanged: (newText) {},
+          onSaved: (newText) {
+            print('onSaved');
+          },
+          onFieldSubmitted: (newText) {
+            setState(() {
+              //update name through receipt_data and receiver
+              Provider.of<ReceiptList>(context, listen: false).setName(index, newText);
+              writeReceiptsToDevice();
+            });
+          },
+        ),
+      ),
+    );
+
+    /// seconds row ---------------------------------------------------------------------------------------------------
+    TableRow textFieldRow = MyTableRow.createTableRow(
+      rowHeight: _rowHeight,
+      text1: '',
+      text2: '',
+      text3: '',
+      iconData: iconDataSpec.getIconData(receipt.iconId),
+      index: index,
+      iconFunction: () async {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => IconSelectScreen(activeReceiptIndex: index)));
+      },
+      context: context,
+      widget: textField,
+    );
 
     /// table ---------------------------------------------------------------------------------------------------------
     Widget table = Container(
@@ -288,11 +332,11 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
           3: FractionColumnWidth(0.68),
           4: FractionColumnWidth(0.15),
         },
-        children: [minutesRow, secondsRow, steeringRow, turnsRow],
+        children: [textFieldRow, minutesRow, secondsRow, steeringRow, turnsRow],
       ),
     );
 
-    List<Widget> draggableItems = [draggableLogo, headerTile, spaceBig, textField, table];
+    List<Widget> draggableItems = [draggableLogo, headerTile, spaceBig, table];
 
     /// main widget ---------------------------------------------------------------------------------------------------
     return DraggableScrollableSheet(

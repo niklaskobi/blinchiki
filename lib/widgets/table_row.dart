@@ -8,14 +8,9 @@ class MyTableRow {
     String text3,
     IconData iconData,
     int index,
-    int divisions,
-    double min,
-    double max,
-    double sliderValue,
     Function iconFunction,
-    Function sliderFunction,
-    Function onChangeEndFunction,
     BuildContext context,
+    Widget widget,
   }) {
     return TableRow(
       children: <Widget>[
@@ -41,27 +36,7 @@ class MyTableRow {
               ),
             )),
         Container(height: rowHeight, child: Align(alignment: Alignment.center, child: Text(text2))),
-        SliderTheme(
-          data: SliderTheme.of(context),
-          child: Container(
-            height: rowHeight,
-            child: Align(
-              alignment: Alignment.center,
-              child: Slider(
-                value: sliderValue,
-                divisions: divisions,
-                min: min,
-                max: max,
-                onChanged: (double newValue) {
-                  sliderFunction(newValue);
-                },
-                onChangeEnd: (double newValue) {
-                  onChangeEndFunction();
-                },
-              ),
-            ),
-          ),
-        ),
+        widget,
         Container(height: rowHeight, child: Align(alignment: Alignment.center, child: Text(text3))),
       ],
     );
