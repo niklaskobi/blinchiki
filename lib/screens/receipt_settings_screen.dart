@@ -26,7 +26,7 @@ class ReceiptSettingsScreen extends StatefulWidget {
 
 class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
   /// statics ----------------------------------------------
-  static double _maxChildSize = 0.6;
+  static double _maxChildSize = 0.7;
   static double _minChildSize = 0.15;
   final myController = TextEditingController();
 
@@ -89,6 +89,22 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
           _timerIndex = decreaseWithBoundary(this._timerIndex, 0);
         }
       });
+    }
+
+    Container rectangleIconButton(IconData iconData, Function onTap) {
+      return Container(
+        child: Material(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            color: Colors.white,
+            elevation: 1,
+            child: IconButton(
+              icon: Icon(iconData),
+              color: Colors.black,
+              onPressed: onTap,
+            )),
+      );
     }
 
     void updateAmountOfTurns(int value) {
@@ -267,24 +283,19 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
           if (isTurnsAvailable) Icon(kTurnsIcon),
           if (isTurnsAvailable) Text('${receipt.durations.length - 1}'),
           SizedBox(width: screenWidth * 0.1),
-          /*
-          Container(
-            width: screenWidth * 0.1,
-            child: Material(
-                shape: CircleBorder(),
-                color: Colors.white,
-                elevation: 1,
-                child: Ink(
-                    //decoration: const ShapeDecoration(shape: CircleBorder(), color: Colors.lightBlueAccent),
-                    child: IconButton(
-                  icon: Icon(Icons.save),
-                  color: Colors.black,
-                  onPressed: () async {
-                    await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
-                  },
-                ))),
-          )
-           */
+        ],
+      ),
+    );
+
+    /// footer --------------------------------------------------------------------------------------------------------
+    Widget footerTile = Container(
+      height: screenHeight * 0.1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          rectangleIconButton(kStoveSelectionIcon, () {}),
+          SizedBox(width: screenWidth * 0.1),
+          rectangleIconButton(kWarmedUpIcon, () {}),
         ],
       ),
     );
@@ -340,7 +351,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       ),
     );
 
-    List<Widget> draggableItems = [draggableLogo, headerTile, spaceBig, table];
+    List<Widget> draggableItems = [draggableLogo, headerTile, spaceBig, table, footerTile];
 
     /// main widget ---------------------------------------------------------------------------------------------------
     return DraggableScrollableSheet(

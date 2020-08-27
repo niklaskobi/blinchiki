@@ -16,7 +16,7 @@ class MyTableRow {
             height: rowHeight,
             child: Align(
               alignment: Alignment.center,
-              child: myIconButton(iconData, iconFunction, rowHeight * 0.75),
+              child: myIconButtonWithCircle(iconData, iconFunction, rowHeight * 0.75),
             )),
         widget,
         Container(height: rowHeight, child: Align(alignment: Alignment.center, child: Text(text))),
@@ -24,13 +24,13 @@ class MyTableRow {
     );
   }
 
-  static Widget myIconButton0(IconData iconData, Function onPressed, width) {
+  static Widget myIconButton(IconData iconData, Function onPressed, width) {
     return Container(
       child: IconButton(icon: Icon(iconData, color: Colors.black), onPressed: onPressed),
     );
   }
 
-  static Widget myIconButton(IconData iconData, Function onPressed, width) {
+  static Widget myIconButtonWithCircle(IconData iconData, Function onPressed, width) {
     return Container(
       width: width,
       child: Material(

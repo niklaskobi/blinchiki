@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 const IconData kFireIcon = FontAwesomeIcons.fire;
 const IconData kTimerIcon = Icons.timer;
 const IconData kTurnsIcon = Icons.repeat;
+const IconData kStoveSelectionIcon = Icons.border_all;
+const IconData kWarmedUpIcon = Icons.whatshot;
 
 /// Colors - Basic
 const Color kBackgroundBlack = Color(0xFF212121);
