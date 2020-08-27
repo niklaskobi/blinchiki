@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class MyTableRow {
   static TableRow createTableRow({
     double rowHeight,
-    String text,
     IconData iconData,
     int index,
     Function iconFunction,
@@ -19,7 +18,6 @@ class MyTableRow {
               child: myIconButtonWithCircle(iconData, iconFunction, rowHeight * 0.75),
             )),
         widget,
-        Container(height: rowHeight, child: Align(alignment: Alignment.center, child: Text(text))),
       ],
     );
   }

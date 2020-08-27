@@ -140,24 +140,22 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
         double max,
         Function sliderFunction,
         Function onChangeEndFunction}) {
-      return SliderTheme(
-        data: SliderTheme.of(context),
-        child: Container(
-          height: rowHeight,
-          child: Align(
-            alignment: Alignment.center,
-            child: Slider(
-              value: sliderValue,
-              divisions: divisions,
-              min: min,
-              max: max,
-              onChanged: (double newValue) {
-                sliderFunction(newValue);
-              },
-              onChangeEnd: (double newValue) {
-                onChangeEndFunction();
-              },
-            ),
+      return Container(
+        height: rowHeight,
+        child: Align(
+          alignment: Alignment.center,
+          child: Slider(
+            value: sliderValue,
+            divisions: divisions,
+            min: min,
+            max: max,
+            label: sliderValue.round().toString(),
+            onChanged: (double newValue) {
+              sliderFunction(newValue);
+            },
+            onChangeEnd: (double newValue) {
+              onChangeEndFunction();
+            },
           ),
         ),
       );
@@ -166,7 +164,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// turns row ----------------------------------------------------------------------------------------------------
     TableRow turnsRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
-      text: '${receipt.durations.length - 1}',
       iconData: kTurnsIcon,
       index: index,
       iconFunction: null,
@@ -188,7 +185,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// steering row --------------------------------------------------------------------------------------------------
     TableRow steeringRow = MyTableRow.createTableRow(
         rowHeight: _rowHeight,
-        text: '${receipt.steeringSetting.value}',
         iconData: kFireIcon,
         index: index,
         iconFunction: null,
@@ -209,7 +205,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// minutes row ---------------------------------------------------------------------------------------------------
     TableRow minutesRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
-      text: '${receipt.getMinutes(_timerIndex)} \'',
       iconData: kTimerIcon,
       index: index,
       iconFunction: decreaseDurationIndex,
@@ -231,7 +226,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// seconds row ---------------------------------------------------------------------------------------------------
     TableRow secondsRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
-      text: '${receipt.getSeconds(_timerIndex)} \'\'',
       iconData: kTimerIcon,
       index: index,
       iconFunction: increaseDurationIndex,
@@ -336,7 +330,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// seconds row ---------------------------------------------------------------------------------------------------
     TableRow textFieldRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
-      text: '',
       iconData: iconDataSpec.getIconData(receipt.iconId),
       index: index,
       iconFunction: () async {
@@ -351,9 +344,8 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       padding: EdgeInsets.only(top: screenHeight * 0.03),
       child: Table(
         columnWidths: {
-          0: FractionColumnWidth(0.15),
-          1: FractionColumnWidth(0.7),
-          2: FractionColumnWidth(0.15),
+          0: FractionColumnWidth(0.13),
+          1: FractionColumnWidth(0.87),
         },
         children: [textFieldRow, minutesRow, secondsRow, steeringRow, turnsRow],
       ),
