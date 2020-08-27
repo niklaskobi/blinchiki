@@ -94,6 +94,12 @@ class ReceiptList extends ChangeNotifier {
     return this._list.indexOf(newReceipt);
   }
 
+  /// toggle warmUpButton
+  void toggleWarmUp(int index) {
+    this._list[index].isWarmedUp = !this._list[index].isWarmedUp;
+    notifyListeners();
+  }
+
   void initReceiptListFromJson(String json) {
     initFromJson(jsonDecode(json));
     notifyListeners();

@@ -49,7 +49,8 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     final Color _bgColor = Colors.blue[100];
     IconDataSpec iconDataSpec = IconDataSpec();
 
-    Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(index);
+    ReceiptList receiptList = Provider.of<ReceiptList>(context, listen: false);
+    Receipt receipt = receiptList.getReceiptByIndex(index);
     myController.text = receipt.name;
 
     /// write receipt list to the device's storage
@@ -91,7 +92,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       });
     }
 
-    Container rectangleIconButton(IconData iconData, Function onTap) {
+    Container rectangleIconButton({IconData iconData, Function onTap, Color color}) {
       return Container(
         child: Material(
             shape: RoundedRectangleBorder(
@@ -101,7 +102,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
             elevation: 1,
             child: IconButton(
               icon: Icon(iconData),
-              color: Colors.black,
+              color: color,
               onPressed: onTap,
             )),
       );
@@ -117,7 +118,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
         MyDuration newDuration =
             saveDurationsMap.containsKey(value) ? saveDurationsMap[value] : MyDuration(minutes: 0, seconds: 0);
         //TODO: not sure whether i need a loop here, or a single increment is enough
-        Provider.of<ReceiptList>(context, listen: false).addNewDuration(index, newDuration);
+        receiptList.addNewDuration(index, newDuration);
         writeReceiptsToDevice();
       } else if (value + 1 < durations) {
         // save previous value
@@ -200,7 +201,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
             sliderValue: receipt.steeringSetting.value,
             sliderFunction: (double newValue) {
               setState(() {
-                Provider.of<ReceiptList>(context, listen: false).setSteering(index, newValue);
+                receiptList.setSteering(index, newValue);
               });
             },
             onChangeEndFunction: writeReceiptsToDevice));
@@ -221,7 +222,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
           sliderValue: receipt.getMinutes(_timerIndex).toDouble(),
           sliderFunction: (double newValue) {
             setState(() {
-              Provider.of<ReceiptList>(context, listen: false).setMinutes(index, _timerIndex, newValue.round());
+              receiptList.setMinutes(index, _timerIndex, newValue.round());
             });
           },
           onChangeEndFunction: writeReceiptsToDevice),
@@ -243,7 +244,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
           sliderValue: receipt.getSeconds(_timerIndex).toDouble(),
           sliderFunction: (double newValue) {
             setState(() {
-              Provider.of<ReceiptList>(context, listen: false).setSeconds(index, _timerIndex, newValue.round());
+              receiptList.setSeconds(index, _timerIndex, newValue.round());
             });
           },
           onChangeEndFunction: writeReceiptsToDevice),
@@ -282,7 +283,8 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
           if (isTurnsAvailable) SizedBox(width: screenWidth * 0.03),
           if (isTurnsAvailable) Icon(kTurnsIcon),
           if (isTurnsAvailable) Text('${receipt.durations.length - 1}'),
-          SizedBox(width: screenWidth * 0.1),
+          SizedBox(width: screenWidth * 0.03),
+          if (receipt.isWarmedUp) Icon(kWarmedUpIcon),
         ],
       ),
     );
@@ -293,9 +295,15 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          rectangleIconButton(kStoveSelectionIcon, () {}),
+          rectangleIconButton(iconData: kStoveSelectionIcon, onTap: () {}, color: kIconColorActive),
           SizedBox(width: screenWidth * 0.1),
-          rectangleIconButton(kWarmedUpIcon, () {}),
+          rectangleIconButton(
+              iconData: kWarmedUpIcon,
+              onTap: () {
+                receiptList.toggleWarmUp(index);
+                writeReceiptsToDevice();
+              },
+              color: receipt.isWarmedUp ? kIconColorActive : kIconColorNotActive)
         ],
       ),
     );
@@ -317,7 +325,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
           onFieldSubmitted: (newText) {
             setState(() {
               //update name through receipt_data and receiver
-              Provider.of<ReceiptList>(context, listen: false).setName(index, newText);
+              receiptList.setName(index, newText);
               writeReceiptsToDevice();
             });
           },

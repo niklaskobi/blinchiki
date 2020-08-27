@@ -21,7 +21,6 @@ class _TimesColumnWidgetState extends State<TimesColumnWidget> {
           //height: 30,
           width: 50,
           child: ListView.builder(
-              //padding: const EdgeInsets.all(8),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: widget.durations.length,

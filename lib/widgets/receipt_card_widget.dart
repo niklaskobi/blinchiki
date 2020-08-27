@@ -24,6 +24,7 @@ class ReceiptCardWidget extends StatelessWidget {
   static double _contentTitleSize = _containerHeight * 0.2;
   static double _contentIconSize = _containerHeight * 0.15;
   static double _contentIconTextSize = _containerHeight * 0.15;
+  static double _contentInbetweenSize = _containerHeight * 0.1;
 
   ReceiptCardWidget({this.receipt, this.shortPressCallback, this.longPressCallback, this.iconData});
 
@@ -69,6 +70,8 @@ class ReceiptCardWidget extends StatelessWidget {
                       Icon(kTimerIcon, size: _contentIconSize),
                       Text(receipt.getOverallSeconds(0).toString(),
                           style: TextStyle(color: Colors.black, fontSize: _contentIconTextSize)),
+                      SizedBox(width: _contentInbetweenSize),
+                      if (receipt.isWarmedUp) Icon(kWarmedUpIcon, size: _contentIconSize)
                     ],
                   ),
                 ],

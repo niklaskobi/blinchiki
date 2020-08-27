@@ -1,8 +1,7 @@
 import 'dart:convert';
-
 import 'package:blinchiki_app/models/duration.dart';
-import 'package:blinchiki_app/models/receipt_data.dart';
 import 'package:blinchiki_app/models/steering_setting.dart';
+import 'package:flutter/cupertino.dart';
 
 class Receipt {
   String _name;
@@ -10,25 +9,25 @@ class Receipt {
   int _iconId;
   int _stoveId;
   int _activeBurnerIndex;
-  //int _turns;
   SteeringSetting _steeringSetting;
+  bool _isWarmedUp;
 
   /// constructor
   Receipt(
-      {String name,
-      List<MyDuration> durations,
-      int iconId,
-      int stoveId,
-      int activeBurnerIndex,
-      int turns,
-      SteeringSetting steeringSetting}) {
+      {@required String name,
+      @required List<MyDuration> durations,
+      @required int iconId,
+      @required int stoveId,
+      @required int activeBurnerIndex,
+      @required SteeringSetting steeringSetting,
+      @required bool isWarmedUp}) {
     this._name = name;
     this._durations = durations;
     this._iconId = iconId;
     this._stoveId = stoveId;
     this._activeBurnerIndex = activeBurnerIndex;
-    //this._turns = turns;
     this._steeringSetting = steeringSetting;
+    this._isWarmedUp = isWarmedUp;
   }
 
   /// duration
@@ -59,11 +58,9 @@ class Receipt {
   int get iconId => this._iconId;
   set iconId(int id) => this._iconId = id;
 
-  /*
-  /// turns
-  int get turns => this._turns == null ? 0 : this._turns;
-  setTurns(int t) => this._turns = t;
-   */
+  /// isWarmedUp
+  bool get isWarmedUp => this._isWarmedUp;
+  set isWarmedUp(bool w) => this._isWarmedUp = w;
 
   /// parse Duration list
   static List<MyDuration> durationsFromJson(String json) =>
@@ -76,8 +73,8 @@ class Receipt {
         _iconId = json['iconId'],
         _stoveId = json['stoveId'],
         _activeBurnerIndex = json['activeBurnerIndex'],
-        //_turns = json['turns'],
-        _steeringSetting = SteeringSetting.fromJson(jsonDecode(json['steeringSetting']));
+        _steeringSetting = SteeringSetting.fromJson(jsonDecode(json['steeringSetting'])),
+        _isWarmedUp = json['isWarmedUp'];
 
   /// serialization
   Map<String, dynamic> toJson() => {
@@ -86,19 +83,20 @@ class Receipt {
         'iconId': _iconId,
         'stoveId': _stoveId,
         'activeBurnerIndex': _activeBurnerIndex,
-        //'turns': _turns,
-        'steeringSetting': jsonEncode(_steeringSetting)
+        'steeringSetting': jsonEncode(_steeringSetting),
+        'isWarmedUp': _isWarmedUp,
       };
 
   /// copy constructor
   Receipt copy() {
     return Receipt(
-        name: this._name,
-        durations: this._durations,
-        iconId: this._iconId,
-        stoveId: this._stoveId,
-        activeBurnerIndex: this._activeBurnerIndex,
-        //turns: this._turns,
-        steeringSetting: this._steeringSetting);
+      name: this._name,
+      durations: this._durations,
+      iconId: this._iconId,
+      stoveId: this._stoveId,
+      activeBurnerIndex: this._activeBurnerIndex,
+      steeringSetting: this._steeringSetting,
+      isWarmedUp: this._isWarmedUp,
+    );
   }
 }

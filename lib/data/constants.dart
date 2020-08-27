@@ -11,6 +11,8 @@ const IconData kWarmedUpIcon = Icons.whatshot;
 /// Colors - Basic
 const Color kBackgroundBlack = Color(0xFF212121);
 const Color kBackgroundWhite = Color(0xFFe0e0e0);
+const Color kIconColorActive = Colors.black;
+const Color kIconColorNotActive = Colors.grey;
 
 /// Colors - Receipt Card
 const Color kReceiptCardBackground = Color(0xFFfafafa);
