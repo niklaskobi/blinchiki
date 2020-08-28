@@ -1,4 +1,5 @@
 import 'package:blinchiki_app/models/icon_group.dart';
+import 'package:blinchiki_app/models/unit.dart';
 import 'package:flutter/material.dart';
 import 'icon_spec.dart';
 import 'icon_group.dart';
@@ -11,13 +12,17 @@ class IconDataSpec {
     return _instance;
   }
 
+  List<Unit> _unitList = [
+    Unit(id: UnitIconId.celsius, icon: Icons.translate),
+    Unit(id: UnitIconId.fahrenheit, icon: Icons.translate),
+  ];
+
   List<IconGroup> _groupIdList = [
     IconGroup(label: 'Fastfood', iconData: Icons.fastfood, id: 0),
     IconGroup(label: 'Beverages', iconData: Icons.beach_access, id: 1),
     IconGroup(label: 'Brakfast', iconData: Icons.style, id: 2),
   ];
 
-  //TODO: make ids groupwise: like 101, 102, .. for group 1, 201, 202 .... for group 2
   List<IconSpec> _iconsList = [
     IconSpec(iconData: Icons.fastfood, groupId: 0, id: 0),
     IconSpec(iconData: Icons.email, groupId: 0, id: 1),

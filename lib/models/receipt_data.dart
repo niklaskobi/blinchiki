@@ -1,11 +1,21 @@
 import 'package:blinchiki_app/models/duration.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/steering_setting.dart';
+import 'package:blinchiki_app/models/unit.dart';
 import 'package:flutter/foundation.dart';
 
 class ReceiptData extends ChangeNotifier {
   static int maxDurationAmount = 4;
-  static SteeringSetting defaultSteering = SteeringSetting(min: 0, max: 3, step: 0.5, value: 0, steeringId: 1);
+  static SteeringSetting defaultSteering = SteeringSetting(
+    min: 0,
+    max: 3,
+    step: 0.5,
+    value: 0,
+    unitId: UnitIconId.celsius,
+    mainStoveIconId: 0,
+    secondStoveIconId: -1,
+    thirdStoveIconId: -1,
+  );
   static MyDuration defaultDuration = MyDuration(minutes: 0, seconds: 0);
   static Receipt getDefaultReceipt() {
     return Receipt(
@@ -26,7 +36,7 @@ class ReceiptData extends ChangeNotifier {
         iconId: 1,
         stoveId: 1,
         activeBurnerIndex: 1,
-        steeringSetting: defaultSteering,
+        steeringSetting: defaultSteering.copy(),
         isWarmedUp: true),
     Receipt(
         name: "Chai",
@@ -34,7 +44,7 @@ class ReceiptData extends ChangeNotifier {
         iconId: 1,
         stoveId: 1,
         activeBurnerIndex: 1,
-        steeringSetting: defaultSteering,
+        steeringSetting: defaultSteering.copy(),
         isWarmedUp: false),
     Receipt(
         name: "Soup",
@@ -42,7 +52,7 @@ class ReceiptData extends ChangeNotifier {
         iconId: 1,
         stoveId: 1,
         activeBurnerIndex: 1,
-        steeringSetting: defaultSteering,
+        steeringSetting: defaultSteering.copy(),
         isWarmedUp: false),
     Receipt(
         name: "Makarohi",
@@ -50,7 +60,7 @@ class ReceiptData extends ChangeNotifier {
         iconId: 2,
         stoveId: 1,
         activeBurnerIndex: 1,
-        steeringSetting: defaultSteering,
+        steeringSetting: defaultSteering.copy(),
         isWarmedUp: true)
   ];
 }

@@ -5,6 +5,7 @@ import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/models/receipt_data.dart';
 import 'package:blinchiki_app/screens/icon_select_screen.dart';
+import 'package:blinchiki_app/screens/stove_select_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:blinchiki_app/data/fileIO.dart';
@@ -289,7 +290,14 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          rectangleIconButton(iconData: kStoveSelectionIcon, onTap: () {}, color: kIconColorActive),
+          rectangleIconButton(
+            iconData: kStoveSelectionIcon,
+            onTap: () async {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => StoveSelectScreen(setting: receipt.steeringSetting)));
+            },
+            color: kIconColorActive,
+          ),
           SizedBox(width: screenWidth * 0.1),
           rectangleIconButton(
               iconData: kWarmedUpIcon,
@@ -327,7 +335,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       ),
     );
 
-    /// seconds row ---------------------------------------------------------------------------------------------------
+    /// text field row ---------------------------------------------------------------------------------------------------
     TableRow textFieldRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
       iconData: iconDataSpec.getIconData(receipt.iconId),

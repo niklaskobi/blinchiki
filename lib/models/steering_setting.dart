@@ -1,15 +1,38 @@
+import 'package:flutter/cupertino.dart';
+import 'package:blinchiki_app/models/unit.dart';
+
 class SteeringSetting {
   double min;
   double max;
   double step;
   double value;
-  int steeringId;
+  UnitIconId unitId;
+  int mainStoveIconId;
+  int secondStoveIconId;
+  int thirdStoveIconId;
 
-  SteeringSetting({this.min, this.max, this.step, this.value, this.steeringId});
+  SteeringSetting({
+    @required this.min,
+    @required this.max,
+    @required this.step,
+    @required this.value,
+    @required this.unitId,
+    @required this.mainStoveIconId,
+    @required this.secondStoveIconId,
+    @required this.thirdStoveIconId,
+  });
 
   SteeringSetting copy() {
     return SteeringSetting(
-        min: this.min, max: this.max, step: this.step, value: this.value, steeringId: this.steeringId);
+      min: this.min,
+      max: this.max,
+      step: this.step,
+      value: this.value,
+      unitId: this.unitId,
+      mainStoveIconId: this.mainStoveIconId,
+      secondStoveIconId: this.secondStoveIconId,
+      thirdStoveIconId: this.thirdStoveIconId,
+    );
   }
 
   SteeringSetting.fromJson(Map<String, dynamic> json)
@@ -17,13 +40,19 @@ class SteeringSetting {
         max = json['max'],
         step = json['step'],
         value = json['value'],
-        steeringId = json['steeringId'];
+        unitId = json['unitId'],
+        mainStoveIconId = json['mainStoveIconId'],
+        secondStoveIconId = json['secondStoveIconId'],
+        thirdStoveIconId = json['thirdStoveIconId'];
 
   Map<String, dynamic> toJson() => {
         'min': min,
         'max': max,
         'step': step,
         'value': value,
-        'steeringId': steeringId,
+        'unitId': unitId,
+        'mainStoveIconId': mainStoveIconId,
+        'secondStoveIconId': secondStoveIconId,
+        'thirdStoveIconId': thirdStoveIconId,
       };
 }
