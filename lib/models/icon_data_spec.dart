@@ -13,8 +13,8 @@ class IconDataSpec {
   }
 
   List<Unit> _unitList = [
-    Unit(id: UnitIconId.celsius, icon: Icons.translate),
-    Unit(id: UnitIconId.fahrenheit, icon: Icons.translate),
+    Unit(label: '°C', iconId: 0),
+    Unit(label: '°F', iconId: 1),
   ];
 
   List<IconGroup> _groupIdList = [

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:blinchiki_app/models/unit.dart';
 
@@ -6,7 +8,7 @@ class SteeringSetting {
   double max;
   double step;
   double value;
-  UnitIconId unitId;
+  int unitId;
   int mainStoveIconId;
   int secondStoveIconId;
   int thirdStoveIconId;
@@ -45,14 +47,17 @@ class SteeringSetting {
         secondStoveIconId = json['secondStoveIconId'],
         thirdStoveIconId = json['thirdStoveIconId'];
 
-  Map<String, dynamic> toJson() => {
-        'min': min,
-        'max': max,
-        'step': step,
-        'value': value,
-        'unitId': unitId,
-        'mainStoveIconId': mainStoveIconId,
-        'secondStoveIconId': secondStoveIconId,
-        'thirdStoveIconId': thirdStoveIconId,
-      };
+  Map<String, dynamic> toJson() {
+    print('SteeringSetting to json');
+    return {
+      'min': min,
+      'max': max,
+      'step': step,
+      'value': value,
+      'unitId': unitId,
+      'mainStoveIconId': mainStoveIconId,
+      'secondStoveIconId': secondStoveIconId,
+      'thirdStoveIconId': thirdStoveIconId,
+    };
+  }
 }

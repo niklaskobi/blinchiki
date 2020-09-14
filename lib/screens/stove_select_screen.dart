@@ -21,6 +21,7 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.setting.mainStoveIconId);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 

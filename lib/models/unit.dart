@@ -1,13 +1,22 @@
 import 'package:flutter/widgets.dart';
 
-enum UnitIconId {
-  celsius,
-  fahrenheit,
-}
-
 class Unit {
-  UnitIconId id;
-  IconData icon;
+  String label;
+  int iconId;
 
-  Unit({@required this.id, @required this.icon});
+  Unit({@required this.label, @required this.iconId});
+
+  Unit copy() => Unit(label: this.label, iconId: this.iconId);
+
+  Unit.fromJson(Map<String, dynamic> json)
+      : label = json['label'],
+        iconId = json['iconId'];
+
+  Map<String, dynamic> toJson() {
+    print('SteeringSetting to json');
+    return {
+      'label': label,
+      'iconId': iconId,
+    };
+  }
 }

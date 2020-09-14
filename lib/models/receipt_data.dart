@@ -11,7 +11,7 @@ class ReceiptData extends ChangeNotifier {
     max: 3,
     step: 0.5,
     value: 0,
-    unitId: UnitIconId.celsius,
+    unitId: 0,
     mainStoveIconId: 0,
     secondStoveIconId: -1,
     thirdStoveIconId: -1,

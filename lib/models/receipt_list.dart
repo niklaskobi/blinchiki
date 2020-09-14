@@ -101,6 +101,7 @@ class ReceiptList extends ChangeNotifier {
   }
 
   void initReceiptListFromJson(String json) {
+    print('read json from device');
     initFromJson(jsonDecode(json));
     notifyListeners();
   }
@@ -112,6 +113,8 @@ class ReceiptList extends ChangeNotifier {
   }
 
   Map<String, dynamic> toJson() {
+    String test = jsonEncode(this._list);
+    print('json = $test');
     return {'receiptList': jsonEncode(this._list)};
   }
 
