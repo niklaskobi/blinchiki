@@ -1,28 +1,24 @@
 import 'package:blinchiki_app/models/icon_data_spec.dart';
-import 'package:blinchiki_app/models/receipt.dart';
-import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'icons_list_widget.dart';
 
-class IconsBlockWidget extends StatefulWidget {
+class ReceiptIconBlockWidget extends StatefulWidget {
   final int activeIndex;
 
-  IconsBlockWidget({@required this.activeIndex});
+  ReceiptIconBlockWidget({@required this.activeIndex});
 
   @override
-  _IconsBlockWidgetState createState() => _IconsBlockWidgetState();
+  _ReceiptIconBlockWidgetState createState() => _ReceiptIconBlockWidgetState();
 }
 
-class _IconsBlockWidgetState extends State<IconsBlockWidget> {
+class _ReceiptIconBlockWidgetState extends State<ReceiptIconBlockWidget> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
     IconDataSpec iconDataSpec = IconDataSpec();
-    Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(widget.activeIndex);
 
     Container separator() {
       return Container(
@@ -36,8 +32,8 @@ class _IconsBlockWidgetState extends State<IconsBlockWidget> {
 
     return ListView.builder(
       itemBuilder: (context, index) {
-        final iconGroup = iconDataSpec.getIconGroup(index);
-        final iconList = iconDataSpec.getIconsForGroup(index);
+        final iconGroup = iconDataSpec.getReceiptIconGroup(index);
+        final iconList = iconDataSpec.getReceiptIconsForGroup(index);
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -50,11 +46,10 @@ class _IconsBlockWidgetState extends State<IconsBlockWidget> {
               ],
             ),
             IconsListWidget(list: iconList, activeIndex: widget.activeIndex),
-            //Text('Dummy Text', style: TextStyle(color: Colors.black)),
           ],
         );
       },
-      itemCount: iconDataSpec.getIconGroupCount(),
+      itemCount: iconDataSpec.getReceiptIconGroupCount(),
     );
   }
 }

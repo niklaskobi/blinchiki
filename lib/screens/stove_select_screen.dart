@@ -2,7 +2,7 @@ import 'package:blinchiki_app/models/icon_data_spec.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/models/steering_setting.dart';
-import 'package:blinchiki_app/widgets/icons_block_widget.dart';
+import 'package:blinchiki_app/widgets/receipt_icons_block_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -37,16 +37,10 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
                 //fit: BoxFit.scaleDown,
                 width: screenHeight * 0.08,
               ),
-              /*
-              child: Icon(
-                iconDataSpec.getIconData(receipt.iconId),
-                size: screenHeight * 0.07,
-              ),
-               */
               radius: screenHeight * 0.08,
             ),
           ),
-          Expanded(child: IconsBlockWidget(activeIndex: 0)),
+          Expanded(child: ReceiptIconBlockWidget(activeIndex: 0)),
         ],
       ),
     );

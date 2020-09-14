@@ -112,11 +112,7 @@ class ReceiptList extends ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, dynamic> toJson() {
-    String test = jsonEncode(this._list);
-    print('json = $test');
-    return {'receiptList': jsonEncode(this._list)};
-  }
+  Map<String, dynamic> toJson() => {'receiptList': jsonEncode(this._list)};
 
   /// get count of all receipts
   int get receiptCount => _list.length;

@@ -47,17 +47,14 @@ class SteeringSetting {
         secondStoveIconId = json['secondStoveIconId'],
         thirdStoveIconId = json['thirdStoveIconId'];
 
-  Map<String, dynamic> toJson() {
-    print('SteeringSetting to json');
-    return {
-      'min': min,
-      'max': max,
-      'step': step,
-      'value': value,
-      'unitId': unitId,
-      'mainStoveIconId': mainStoveIconId,
-      'secondStoveIconId': secondStoveIconId,
-      'thirdStoveIconId': thirdStoveIconId,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'min': min,
+        'max': max,
+        'step': step,
+        'value': value,
+        'unitId': unitId,
+        'mainStoveIconId': mainStoveIconId,
+        'secondStoveIconId': secondStoveIconId,
+        'thirdStoveIconId': thirdStoveIconId,
+      };
 }

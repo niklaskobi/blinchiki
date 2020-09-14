@@ -17,13 +17,13 @@ class IconDataSpec {
     Unit(label: '°F', iconId: 1),
   ];
 
-  List<IconGroup> _groupIdList = [
+  List<IconGroup> _receiptGroupIdList = [
     IconGroup(label: 'Fastfood', iconData: Icons.fastfood, id: 0),
     IconGroup(label: 'Beverages', iconData: Icons.beach_access, id: 1),
     IconGroup(label: 'Brakfast', iconData: Icons.style, id: 2),
   ];
 
-  List<IconSpec> _iconsList = [
+  List<IconSpec> _receiptIconsList = [
     IconSpec(iconData: Icons.fastfood, groupId: 0, id: 0),
     IconSpec(iconData: Icons.email, groupId: 0, id: 1),
     IconSpec(iconData: Icons.save, groupId: 0, id: 2),
@@ -35,11 +35,11 @@ class IconDataSpec {
     IconSpec(iconData: Icons.ac_unit, groupId: 2, id: 200),
   ];
 
-  IconData getIconData(int iconId) => _iconsList.firstWhere((i) => i.id == iconId).iconData;
+  IconData getReceiptIconData(int iconId) => _receiptIconsList.firstWhere((i) => i.id == iconId).iconData;
 
-  IconGroup getIconGroup(int id) => _groupIdList.firstWhere((i) => i.id == id);
+  IconGroup getReceiptIconGroup(int id) => _receiptGroupIdList.firstWhere((i) => i.id == id);
 
-  int getIconGroupCount() => _groupIdList.length;
+  int getReceiptIconGroupCount() => _receiptGroupIdList.length;
 
-  List<IconSpec> getIconsForGroup(int groupId) => _iconsList.where((i) => i.groupId == groupId).toList();
+  List<IconSpec> getReceiptIconsForGroup(int groupId) => _receiptIconsList.where((i) => i.groupId == groupId).toList();
 }

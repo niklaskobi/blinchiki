@@ -77,22 +77,15 @@ class Receipt {
         _isWarmedUp = json['isWarmedUp'];
 
   /// serialization
-  Map<String, dynamic> toJson() {
-    print('receit to json');
-    String test2 = jsonEncode(_steeringSetting);
-    print('steeringJson = $test2');
-    Map<String, dynamic> test = {
-      'name': _name,
-      'durations': jsonEncode(_durations),
-      'iconId': _iconId,
-      'stoveId': _stoveId,
-      'activeBurnerIndex': _activeBurnerIndex,
-      'steeringSetting': jsonEncode(_steeringSetting),
-      'isWarmedUp': _isWarmedUp,
-    };
-    print('test = $test');
-    return test;
-  }
+  Map<String, dynamic> toJson() => {
+        'name': _name,
+        'durations': jsonEncode(_durations),
+        'iconId': _iconId,
+        'stoveId': _stoveId,
+        'activeBurnerIndex': _activeBurnerIndex,
+        'steeringSetting': jsonEncode(_steeringSetting),
+        'isWarmedUp': _isWarmedUp,
+      };
 
   /// copy constructor
   Receipt copy() {

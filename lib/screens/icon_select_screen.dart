@@ -1,7 +1,7 @@
 import 'package:blinchiki_app/models/icon_data_spec.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
-import 'package:blinchiki_app/widgets/icons_block_widget.dart';
+import 'package:blinchiki_app/widgets/receipt_icons_block_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -32,13 +32,13 @@ class _IconSelectScreenState extends State<IconSelectScreen> {
             margin: EdgeInsets.only(top: screenHeight * 0.1, bottom: screenHeight * 0.05),
             child: CircleAvatar(
               child: Icon(
-                iconDataSpec.getIconData(receipt.iconId),
+                iconDataSpec.getReceiptIconData(receipt.iconId),
                 size: screenHeight * 0.07,
               ),
               radius: screenHeight * 0.08,
             ),
           ),
-          Expanded(child: IconsBlockWidget(activeIndex: widget.activeReceiptIndex)),
+          Expanded(child: ReceiptIconBlockWidget(activeIndex: widget.activeReceiptIndex)),
         ],
       ),
     );

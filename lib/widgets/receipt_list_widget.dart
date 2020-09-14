@@ -60,7 +60,7 @@ class _ReceiptListWidgetState extends State<ReceiptListWidget> {
               child: Container(
                 color: kBackgroundWhite,
                 child: ReceiptCardWidget(
-                  iconData: iconDataSpec.getIconData(receipt.iconId),
+                  iconData: iconDataSpec.getReceiptIconData(receipt.iconId),
                   receipt: receipt,
                   shortPressCallback: () {
                     Navigator.push(

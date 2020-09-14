@@ -338,7 +338,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
     /// text field row ---------------------------------------------------------------------------------------------------
     TableRow textFieldRow = MyTableRow.createTableRow(
       rowHeight: _rowHeight,
-      iconData: iconDataSpec.getIconData(receipt.iconId),
+      iconData: iconDataSpec.getReceiptIconData(receipt.iconId),
       index: index,
       iconFunction: () async {
         Navigator.push(context, MaterialPageRoute(builder: (context) => IconSelectScreen(activeReceiptIndex: index)));
