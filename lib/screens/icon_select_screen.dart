@@ -5,7 +5,7 @@ import 'package:blinchiki_app/widgets/receipt_icons_block_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:blinchiki_app/data/constants.dart';
 
 class IconSelectScreen extends StatefulWidget {
   final int activeReceiptIndex;
@@ -36,6 +36,7 @@ class _IconSelectScreenState extends State<IconSelectScreen> {
                 size: screenHeight * 0.07,
               ),
               radius: screenHeight * 0.08,
+              backgroundColor: kReceiptCardDescription,
             ),
           ),
           Expanded(child: ReceiptIconBlockWidget(activeIndex: widget.activeReceiptIndex)),

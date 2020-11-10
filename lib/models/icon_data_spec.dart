@@ -1,6 +1,9 @@
 import 'package:blinchiki_app/models/icon_group.dart';
+import 'package:blinchiki_app/models/receipt.dart';
+import 'package:blinchiki_app/models/steering_setting.dart';
 import 'package:blinchiki_app/models/unit.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'icon_spec.dart';
 import 'icon_group.dart';
 
@@ -34,6 +37,71 @@ class IconDataSpec {
     IconSpec(iconData: Icons.cake, groupId: 1, id: 100),
     IconSpec(iconData: Icons.ac_unit, groupId: 2, id: 200),
   ];
+
+  List<String> _firstStoveIconsList = [
+    'assets/icons/general/stove.svg',
+    'assets/icons/general/grill.svg',
+    'assets/icons/general/microwave.svg',
+    'assets/icons/general/bbq.svg',
+    'assets/icons/general/electric-grill.svg',
+    'assets/icons/general/blender.svg',
+    'assets/icons/general/toaster_bread.svg',
+    'assets/icons/general/gas.svg',
+    'assets/icons/general/kitchen.svg',
+    'assets/icons/general/stove_1.svg',
+  ];
+
+  List<String> _secondStoveIconsList = [
+    'assets/icons/stoves/stove_1_0.svg',
+    'assets/icons/stoves/stove_2h_0.svg',
+    'assets/icons/stoves/stove_2v_0.svg',
+    'assets/icons/stoves/stove_4_0.svg',
+    'assets/icons/stoves/stove_5_0.svg',
+    'assets/icons/stoves/stove_6_0.svg',
+  ];
+
+  //TODO create all thirdLevel lists
+  List<String> thirdStoveIconsList1 = ['assets/icons/stoves/stove_1_1.svg'];
+
+  List<String> getStoveIconsList(int level, {int secondStoveId: -1}) {
+    switch (level) {
+      case 0:
+        return this._firstStoveIconsList;
+        break;
+      case 1:
+        return this._secondStoveIconsList;
+        break;
+      case 2:
+        return _getThirdLevelList(secondStoveId);
+        break;
+    }
+    return null;
+  }
+
+  // TODO: complete this
+  List<String> _getThirdLevelList(int secondLevelIndex) {
+    switch (secondLevelIndex) {
+      case 0:
+        return thirdStoveIconsList1;
+        break;
+    }
+    return null;
+  }
+
+  /// returns main stove icon. If it is a steering with multiple levels (such as stove)
+  /// returns the most deep seleted icon (i.e a stove with only bottom right red circle)
+  String getMainStoveIcon(SteeringSetting s) {
+    if (s.thirdStoveIconId == -1 && s.secondStoveIconId == -1) {
+      /// first level
+      return this._firstStoveIconsList[s.firstStoveIconId];
+    } else if (s.thirdStoveIconId == -1 && s.secondStoveIconId != -1) {
+      /// second level
+      return this._secondStoveIconsList[s.secondStoveIconId];
+    } else {
+      /// third level
+      return _getThirdLevelList(s.secondStoveIconId)[s.thirdStoveIconId];
+    }
+  }
 
   IconData getReceiptIconData(int iconId) => _receiptIconsList.firstWhere((i) => i.id == iconId).iconData;
 

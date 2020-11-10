@@ -198,7 +198,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
             sliderValue: receipt.steeringSetting.value,
             sliderFunction: (double newValue) {
               setState(() {
-                receiptList.setSteering(index, newValue);
+                receiptList.setSteeringValue(index, newValue);
               });
             },
             onChangeEndFunction: writeReceiptsToDevice));
@@ -294,7 +294,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
             iconData: kStoveSelectionIcon,
             onTap: () async {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => StoveSelectScreen(setting: receipt.steeringSetting)));
+                  MaterialPageRoute(builder: (context) => StoveSelectScreen(activeIndex: widget.receiptIndex)));
             },
             color: kIconColorActive,
           ),

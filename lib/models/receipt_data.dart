@@ -12,7 +12,7 @@ class ReceiptData extends ChangeNotifier {
     step: 0.5,
     value: 0,
     unitId: 0,
-    mainStoveIconId: 0,
+    firstStoveIconId: 0,
     secondStoveIconId: -1,
     thirdStoveIconId: -1,
   );

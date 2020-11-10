@@ -66,8 +66,27 @@ class ReceiptList extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// steering
-  void setSteering(int index, double s) => this._list[index].steeringSetting.value = s;
+  /// steering value
+  void setSteeringValue(int index, double s) => this._list[index].steeringSetting.value = s;
+
+  /// steering main icon
+  void setSteeringIcon(int receiptIndex, int level, int index) {
+    switch (level) {
+      case 0:
+        this._list[receiptIndex].steeringSetting.firstStoveIconId = index;
+        this._list[receiptIndex].steeringSetting.secondStoveIconId = -1;
+        this._list[receiptIndex].steeringSetting.thirdStoveIconId = -1;
+        break;
+      case 1:
+        this._list[receiptIndex].steeringSetting.secondStoveIconId = index;
+        this._list[receiptIndex].steeringSetting.thirdStoveIconId = -1;
+        break;
+      case 2:
+        this._list[receiptIndex].steeringSetting.thirdStoveIconId = index;
+        break;
+    }
+    notifyListeners();
+  }
 
   /// seconds
   void setSeconds(int index, int timerIndex, int s) {
