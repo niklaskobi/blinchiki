@@ -1,8 +1,9 @@
-import 'package:blinchiki_app/models/icon_data_spec.dart';
 import 'package:blinchiki_app/widgets/svg_icons_list_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'icons_list_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:blinchiki_app/models/receipt.dart';
+import 'package:blinchiki_app/models/receipt_list.dart';
 
 class SteeringScrollableBlockWidget extends StatefulWidget {
   final int receiptIndex;
@@ -22,11 +23,6 @@ class _SteeringScrollableBlockWidgetState extends State<SteeringScrollableBlockW
   @override
   void initState() {
     super.initState();
-    _list = ListModel<int>(
-      listKey: _listKey,
-      initialItems: <int>[0, 1],
-      removedItemBuilder: _buildRemovedItem,
-    );
     _nextItem = 0;
   }
 
@@ -108,6 +104,12 @@ class _SteeringScrollableBlockWidgetState extends State<SteeringScrollableBlockW
    */
   @override
   Widget build(BuildContext context) {
+    Iterable<int> initItems = getInitList(context);
+    _list = ListModel<int>(
+      listKey: _listKey,
+      initialItems: initItems,
+      removedItemBuilder: _buildRemovedItem,
+    );
     return MaterialApp(
       home: AnimatedList(
         key: _listKey,
@@ -115,6 +117,18 @@ class _SteeringScrollableBlockWidgetState extends State<SteeringScrollableBlockW
         itemBuilder: _buildItem,
       ),
     );
+  }
+
+  Iterable<int> getInitList(BuildContext context) {
+    Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(widget.receiptIndex);
+    Iterable<int> initItems;
+    if (receipt.steeringSetting.getHighestStoveLevel() == 3)
+      initItems = <int>[0, 1, 2];
+    else if (receipt.steeringSetting.getHighestStoveLevel() == 2)
+      initItems = <int>[0, 1];
+    else
+      initItems = <int>[0];
+    return initItems;
   }
 }
 
@@ -193,6 +207,11 @@ class CardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle = Theme.of(context).textTheme.headline4;
+
+    void iconSelection(int level, int index) {
+      Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(receiptIndex);
+      //if (receipt.steeringSetting.)
+    }
 
     if (selected) textStyle = textStyle.copyWith(color: Colors.lightGreenAccent[400]);
     return Padding(

@@ -4,7 +4,6 @@ import 'package:blinchiki_app/models/icon_data_spec.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:blinchiki_app/models/icon_spec.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +28,9 @@ class SvgIconsListWidget extends StatelessWidget {
     final IconDataSpec iconDataSpec = IconDataSpec();
     final list = iconDataSpec.getStoveIconsList(level);
 
+    print("SvgIconsListWidget with index = $receiptIndex");
+    print("SvgIconsListWidget with level = $level");
+
     Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(receiptIndex);
 
     void setIcon(int newIconId) {
@@ -50,6 +52,7 @@ class SvgIconsListWidget extends StatelessWidget {
         onTap: () {
           setIcon(index);
           writeReceiptsToDevice();
+          print('stove selected: $index');
         },
         child: Container(
           height: _iconContainerHeight,

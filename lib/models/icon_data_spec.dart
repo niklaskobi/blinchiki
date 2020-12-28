@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'icon_spec.dart';
 import 'icon_group.dart';
+import 'package:blinchiki_app/data/constants.dart';
 
 class IconDataSpec {
   /// making class a singleton
@@ -89,17 +90,17 @@ class IconDataSpec {
   }
 
   /// returns main stove icon. If it is a steering with multiple levels (such as stove)
-  /// returns the most deep seleted icon (i.e a stove with only bottom right red circle)
+  /// returns the most deep selected icon (i.e a stove with only bottom right red circle)
   String getMainStoveIcon(SteeringSetting s) {
-    if (s.thirdStoveIconId == -1 && s.secondStoveIconId == -1) {
-      /// first level
-      return this._firstStoveIconsList[s.firstStoveIconId];
-    } else if (s.thirdStoveIconId == -1 && s.secondStoveIconId != -1) {
-      /// second level
-      return this._secondStoveIconsList[s.secondStoveIconId];
-    } else {
-      /// third level
-      return _getThirdLevelList(s.secondStoveIconId)[s.thirdStoveIconId];
+    switch (s.getHighestStoveLevel()) {
+      case 1:
+        return this._firstStoveIconsList[s.firstStoveIconId];
+      case 2:
+        return this._secondStoveIconsList[s.secondStoveIconId];
+      case 3:
+        return _getThirdLevelList(s.secondStoveIconId)[s.thirdStoveIconId];
+      default:
+        return UNDEF_STR;
     }
   }
 

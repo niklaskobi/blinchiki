@@ -17,6 +17,19 @@ class SteeringSetting {
 
   IconDataSpec iconDataSpec = IconDataSpec();
 
+  int getHighestStoveLevel() {
+    if (this.thirdStoveIconId == -1 && this.secondStoveIconId == -1) {
+      /// first level
+      return 1;
+    } else if (this.thirdStoveIconId == -1 && this.secondStoveIconId != -1) {
+      /// second level
+      return 2;
+    } else {
+      /// third level
+      return 3;
+    }
+  }
+
   bool isIndexActive(int level, int index) {
     switch (level) {
       case 0:
