@@ -8,10 +8,15 @@ Widget getNumberField(
   String label,
   double fontSize,
 ) {
+  final double _circularBorder = 5.0;
+  final double _marginHorizonal = 10.0;
+  final double _marginVertical = 3.0;
+  final double _paddingHorizontal = 13.0;
+  final double _paddingVertical = 1.0;
   return Container(
-    color: kReceiptCardBackground,
-    padding: EdgeInsets.symmetric(vertical: 1, horizontal: 13.0),
-    margin: EdgeInsets.all(5.0),
+    decoration: BoxDecoration(color: kReceiptCardBackground, borderRadius: BorderRadius.circular(_circularBorder)),
+    padding: EdgeInsets.symmetric(vertical: _paddingVertical, horizontal: _paddingHorizontal),
+    margin: EdgeInsets.symmetric(vertical: _marginVertical, horizontal: _marginHorizonal),
     child: TextFormField(
       initialValue: initValue.toString(),
       autofocus: false,
@@ -20,7 +25,7 @@ Widget getNumberField(
       decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(
-            color: Colors.black,
+            color: Colors.grey,
             fontSize: fontSize,
           )),
       onChanged: (newText) {},
