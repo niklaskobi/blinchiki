@@ -35,14 +35,18 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
       await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
     }
 
-    void iconSelection(int level, int newIconId) {
-      // set icon in receipt
-      Provider.of<ReceiptList>(context, listen: false).setSteeringIcon(widget.activeIndex, level, newIconId);
-      // write to device's memory
+    void stoveIconSelection(int newIconId) {
+      Provider.of<ReceiptList>(context, listen: false).setSteeringIcon(widget.activeIndex, 0, newIconId);
       writeReceiptsToDevice();
     }
 
-    bool isActive(int index) => receipt.steeringSetting.isIndexActive(0, index);
+    void unitIconSelection(int newUnitIconId) {
+      Provider.of<ReceiptList>(context, listen: false).setUnitId(widget.activeIndex, newUnitIconId);
+      writeReceiptsToDevice();
+    }
+
+    bool isStoveIconActive(int index) => receipt.steeringSetting.isIndexActive(0, index);
+    bool isUnitIconActive(int index) => receipt.steeringSetting.unitId == index;
 
     return Scaffold(
       body: ListView(
@@ -65,11 +69,20 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
           getSeparator(Icons.settings, screenHeight, screenWidth),
           //Flexible(child: SteeringScrollableBlockWidget(receiptIndex: widget.activeIndex)),
           SvgIconsListWidget(
-              receiptIndex: widget.activeIndex,
-              iconPathList: iconDataSpec.getStoveIconsList(0),
-              isActive: isActive,
-              onTap: iconSelection),
-          getSeparator(Icons.translate, screenHeight, screenWidth),
+            receiptIndex: widget.activeIndex,
+            iconPathList: iconDataSpec.getStoveIconsList(0),
+            isActive: isStoveIconActive,
+            onTap: stoveIconSelection,
+            svgSizeFactor: 0.6,
+          ),
+          getSeparator(Icons.translate, screenHeight, screenWidth), // Units
+          SvgIconsListWidget(
+            receiptIndex: widget.activeIndex,
+            iconPathList: iconDataSpec.getUnitPathsList(),
+            isActive: isUnitIconActive,
+            onTap: unitIconSelection,
+            svgSizeFactor: 0.35,
+          ),
           getSeparator(Icons.tune, screenHeight, screenWidth),
           getNumberField(receipt.steeringSetting.min, "Min", screenHeight * 0.02),
           getNumberField(receipt.steeringSetting.max, "Max", screenHeight * 0.02),

@@ -14,11 +14,16 @@ class IconDataSpec {
     return _instance;
   }
 
+  //TODO: remove labels, they are not used anywhere
   List<Unit> _unitList = [
-    Unit(label: '°C', path: 'assets/icons/general/units/celsius.svg'),
-    Unit(label: '°F', path: 'assets/icons/general/units/fahrenheit.svg'),
-    Unit(label: '°Perc', path: 'assets/icons/general/units/prozentsatz.svg'),
-    Unit(label: 'N', path: 'assets/icons/general/units/buchstabe-n-kleinbuchstaben.svg'),
+    Unit(label: '°C', path: 'assets/icons/units/celsius.svg'),
+    Unit(label: '°F', path: 'assets/icons/units/fahrenheit.svg'),
+    Unit(label: '%', path: 'assets/icons/units/prozentsatz.svg'),
+    Unit(label: '%', path: 'assets/icons/units/blitz.svg'),
+    Unit(label: '', path: 'assets/icons/units/feuer_bw.svg'),
+    Unit(label: '', path: 'assets/icons/units/strahlung_bw.svg'),
+    Unit(label: '', path: 'assets/icons/units/inf.svg'),
+    Unit(label: '', path: 'assets/icons/units/x-markierung.svg'),
   ];
 
   List<IconGroup> _receiptGroupIdList = [
@@ -111,4 +116,6 @@ class IconDataSpec {
   int getReceiptIconGroupCount() => _receiptGroupIdList.length;
 
   List<IconSpec> getReceiptIconsForGroup(int groupId) => _receiptIconsList.where((i) => i.groupId == groupId).toList();
+
+  List<String> getUnitPathsList() => _unitList.map((i) => i.path).toList();
 }

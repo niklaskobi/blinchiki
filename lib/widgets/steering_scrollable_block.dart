@@ -224,17 +224,18 @@ class ListModel<E> {
 /// true. This widget's height is based on the [animation] parameter, it
 /// varies from 0 to 128 as the animation varies from 0.0 to 1.0.
 class CardItem extends StatelessWidget {
-  const CardItem(
-      {Key key,
-      @required this.animation,
-      this.onTap,
-      @required this.item,
-      this.selected = false,
-      @required this.receiptIndex,
-      this.isActiveFunction,
-      this.list,
-      this.iconSelectionFunction})
-      : assert(animation != null),
+  const CardItem({
+    Key key,
+    @required this.animation,
+    this.onTap,
+    @required this.item,
+    this.selected = false,
+    @required this.receiptIndex,
+    this.isActiveFunction,
+    this.list,
+    this.iconSelectionFunction,
+    this.svgSizeFactor = 0.6,
+  })  : assert(animation != null),
         assert(item != null && item >= 0),
         assert(selected != null),
         super(key: key);
@@ -247,6 +248,7 @@ class CardItem extends StatelessWidget {
   final Function iconSelectionFunction;
   final Function isActiveFunction;
   final List<String> list;
+  final double svgSizeFactor;
 
   @override
   Widget build(BuildContext context) {
@@ -264,6 +266,7 @@ class CardItem extends StatelessWidget {
           iconPathList: list,
           isActive: isActiveFunction,
           onTap: iconSelectionFunction,
+          svgSizeFactor: svgSizeFactor,
         )),
       ),
     );

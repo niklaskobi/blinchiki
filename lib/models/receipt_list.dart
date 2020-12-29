@@ -119,6 +119,12 @@ class ReceiptList extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// toggle warmUpButton
+  void setUnitId(int index, unitId) {
+    this._list[index].steeringSetting.unitId = unitId;
+    notifyListeners();
+  }
+
   void initReceiptListFromJson(String json) {
     print('read json from device');
     initFromJson(jsonDecode(json));

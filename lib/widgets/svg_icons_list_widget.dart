@@ -14,13 +14,14 @@ class SvgIconsListWidget extends StatelessWidget {
   final Function onTap;
   final Function isActive;
   final List<String> iconPathList;
+  final double svgSizeFactor;
 
-  // TODO:
   SvgIconsListWidget({
     @required this.receiptIndex,
     @required this.iconPathList,
     @required this.isActive,
     @required this.onTap,
+    @required this.svgSizeFactor,
   });
 
   @override
@@ -31,7 +32,7 @@ class SvgIconsListWidget extends StatelessWidget {
       Color _bdColor = isActive(index) ? kIconSelectionIconBgActive : kIconSelectionIconBgNonActive;
       return GestureDetector(
         onTap: () {
-          onTap(0, index);
+          onTap(index);
         },
         child: Container(
           height: _iconContainerHeight,
@@ -40,11 +41,9 @@ class SvgIconsListWidget extends StatelessWidget {
           margin: EdgeInsets.all(_containerMargin),
           child: Center(
             child: Container(
-              height: _iconContainerHeight / 1.7,
-              width: _iconContainerHeight / 1.7,
-              child: SvgPicture.asset(
-                iconPathList[index],
-              ),
+              height: _iconContainerHeight * svgSizeFactor,
+              width: _iconContainerHeight * svgSizeFactor,
+              child: SvgPicture.asset(iconPathList[index]),
             ),
           ),
         ),
