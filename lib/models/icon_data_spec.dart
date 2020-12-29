@@ -21,6 +21,13 @@ class IconDataSpec {
     Unit(label: '°F', iconId: 1),
   ];
 
+  // TODO:
+  List<String> _unitIconsList = [
+    'assets/icons/general/stove.svg',
+    'assets/icons/general/grill.svg',
+    'assets/icons/general/microwave.svg',
+  ];
+
   List<IconGroup> _receiptGroupIdList = [
     IconGroup(label: 'Fastfood', iconData: Icons.fastfood, id: 0),
     IconGroup(label: 'Beverages', iconData: Icons.beach_access, id: 1),

@@ -1,14 +1,17 @@
 import 'package:blinchiki_app/models/icon_data_spec.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
-import 'package:blinchiki_app/models/steering_setting.dart';
-import 'package:blinchiki_app/widgets/receipt_icons_block_widget.dart';
+import 'package:blinchiki_app/widgets/icon_selection_separator.dart';
+import 'package:blinchiki_app/widgets/number_enter_field.dart';
 import 'package:blinchiki_app/widgets/steering_scrollable_block.dart';
+import 'package:blinchiki_app/widgets/svg_icons_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:blinchiki_app/data/constants.dart';
+import 'dart:convert';
+import 'package:blinchiki_app/data/fileIO.dart';
 
 class StoveSelectScreen extends StatefulWidget {
   final int activeIndex;
@@ -26,12 +29,27 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
+    Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(widget.activeIndex);
+
+    /// write receipt list to the device's storage
+    void writeReceiptsToDevice() async {
+      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
+    }
+
+    void iconSelection(int level, int newIconId) {
+      // set icon in receipt
+      Provider.of<ReceiptList>(context, listen: false).setSteeringIcon(widget.activeIndex, level, newIconId);
+      // write to device's memory
+      writeReceiptsToDevice();
+    }
+
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: ListView(
+        //mainAxisAlignment: MainAxisAlignment.start,
+        shrinkWrap: true,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: screenHeight * 0.1, bottom: screenHeight * 0.05),
+            margin: EdgeInsets.only(top: screenHeight * 0.05, bottom: screenHeight * 0.05),
             child: CircleAvatar(
               child: Consumer<ReceiptList>(builder: (context, receiptList, child) {
                 return SvgPicture.asset(
@@ -44,7 +62,14 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
               backgroundColor: kReceiptCardDescription,
             ),
           ),
-          Expanded(child: SteeringScrollableBlockWidget(receiptIndex: widget.activeIndex)),
+          getSeparator(Icons.settings, screenHeight, screenWidth),
+          //Flexible(child: SteeringScrollableBlockWidget(receiptIndex: widget.activeIndex)),
+          SvgIconsListWidget(receiptIndex: widget.activeIndex, level: 0, onTap: iconSelection),
+          getSeparator(Icons.translate, screenHeight, screenWidth),
+          getSeparator(Icons.tune, screenHeight, screenWidth),
+          getNumberField(receipt.steeringSetting.min, "Min", screenHeight * 0.02),
+          getNumberField(receipt.steeringSetting.max, "Max", screenHeight * 0.02),
+          getNumberField(receipt.steeringSetting.step, "Step", screenHeight * 0.02),
         ],
       ),
     );

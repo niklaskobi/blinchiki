@@ -1,12 +1,10 @@
 import 'package:blinchiki_app/data/constants.dart';
-import 'package:blinchiki_app/data/fileIO.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:blinchiki_app/models/icon_spec.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
 
 class IconsListWidget extends StatelessWidget {
   /// Sizes - basic
@@ -18,28 +16,19 @@ class IconsListWidget extends StatelessWidget {
 
   final List<IconSpec> list;
   final int activeIndex;
+  final Function onTapFunction;
 
-  IconsListWidget({@required this.list, @required this.activeIndex});
+  IconsListWidget({@required this.list, @required this.activeIndex, @required this.onTapFunction});
 
   @override
   Widget build(BuildContext context) {
     Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(activeIndex);
 
-    void setIcon(int newIconId) {
-      Provider.of<ReceiptList>(context, listen: false).setIconId(activeIndex, newIconId);
-    }
-
-    /// write receipt list to the device's storage
-    void writeReceiptsToDevice() async {
-      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
-    }
-
     Widget iconContainer(IconSpec iconSpec) {
       Color _bdColor = iconSpec.id == receipt.iconId ? kIconSelectionIconBgActive : kIconSelectionIconBgNonActive;
       return GestureDetector(
         onTap: () {
-          setIcon(iconSpec.id);
-          writeReceiptsToDevice();
+          onTapFunction();
         },
         child: Container(
           height: _iconContainerHeight,

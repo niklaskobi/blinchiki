@@ -2,6 +2,11 @@ import 'package:blinchiki_app/models/icon_data_spec.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'icons_list_widget.dart';
+import 'icon_selection_separator.dart';
+import 'package:provider/provider.dart';
+import 'package:blinchiki_app/models/receipt_list.dart';
+import 'package:blinchiki_app/data/fileIO.dart';
+import 'dart:convert';
 
 class ReceiptIconBlockWidget extends StatefulWidget {
   final int activeIndex;
@@ -20,14 +25,14 @@ class _ReceiptIconBlockWidgetState extends State<ReceiptIconBlockWidget> {
 
     IconDataSpec iconDataSpec = IconDataSpec();
 
-    Container separator() {
-      return Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        height: screenHeight * 0.002,
-        width: screenWidth * 0.4,
-        decoration:
-            BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(10.0)), //TODO: take background color
-      );
+    /// write receipt list to the device's storage
+    void writeReceiptsToDevice() async {
+      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
+    }
+
+    void onTap(int newIconId) {
+      Provider.of<ReceiptList>(context, listen: false).setIconId(widget.activeIndex, newIconId);
+      writeReceiptsToDevice();
     }
 
     return ListView.builder(
@@ -37,15 +42,8 @@ class _ReceiptIconBlockWidgetState extends State<ReceiptIconBlockWidget> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                separator(),
-                Icon(iconGroup.iconData),
-                separator(),
-              ],
-            ),
-            IconsListWidget(list: iconList, activeIndex: widget.activeIndex),
+            getSeparator(iconGroup.iconData, screenHeight, screenWidth),
+            IconsListWidget(list: iconList, activeIndex: widget.activeIndex, onTapFunction: onTap),
           ],
         );
       },

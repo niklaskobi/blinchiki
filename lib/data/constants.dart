@@ -9,7 +9,7 @@ const int UNDEF_INT = -1;
 const IconData kFireIcon = FontAwesomeIcons.fire;
 const IconData kTimerIcon = Icons.timer;
 const IconData kTurnsIcon = Icons.repeat;
-const IconData kStoveSelectionIcon = Icons.border_all;
+const IconData kStoveSelectionIcon = Icons.settings;
 const IconData kWarmedUpIcon = Icons.whatshot;
 
 /// Colors - Basic
