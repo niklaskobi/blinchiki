@@ -16,6 +16,7 @@ class IconDataSpec {
 
   //TODO: remove labels, they are not used anywhere
   List<Unit> _unitList = [
+    Unit(label: '°C', path: 'assets/icons/units/regler.svg'),
     Unit(label: '°C', path: 'assets/icons/units/celsius.svg'),
     Unit(label: '°F', path: 'assets/icons/units/fahrenheit.svg'),
     Unit(label: '%', path: 'assets/icons/units/prozentsatz.svg'),
