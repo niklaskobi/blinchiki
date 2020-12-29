@@ -30,6 +30,8 @@ class Receipt {
     this._isWarmedUp = isWarmedUp;
   }
 
+  String toString() => "Receipt:[name:$_name, setting: $_steeringSetting]";
+
   /// duration
   getDurationStr(int index) => this._durations[index].toString();
   getDurationAmount() => this._durations.length;

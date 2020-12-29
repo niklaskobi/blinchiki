@@ -18,8 +18,9 @@ class SvgIconsListWidget extends StatelessWidget {
 
   final int receiptIndex;
   final int level;
+  final Function onTap;
 
-  SvgIconsListWidget({@required this.receiptIndex, @required this.level});
+  SvgIconsListWidget({@required this.receiptIndex, @required this.level, @required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -28,21 +29,7 @@ class SvgIconsListWidget extends StatelessWidget {
     final IconDataSpec iconDataSpec = IconDataSpec();
     final list = iconDataSpec.getStoveIconsList(level);
 
-    print("SvgIconsListWidget with index = $receiptIndex");
-    print("SvgIconsListWidget with level = $level");
-
     Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(receiptIndex);
-
-    void setIcon(int newIconId) {
-      Provider.of<ReceiptList>(context, listen: false).setSteeringIcon(receiptIndex, level, newIconId);
-    }
-
-    /// write receipt list to the device's storage
-    void writeReceiptsToDevice() async {
-      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
-    }
-
-    void selectSteering(int index) {}
 
     Widget iconContainer(int index) {
       Color _bdColor = receipt.steeringSetting.isIndexActive(level, index)
@@ -50,9 +37,7 @@ class SvgIconsListWidget extends StatelessWidget {
           : kIconSelectionIconBgNonActive;
       return GestureDetector(
         onTap: () {
-          setIcon(index);
-          writeReceiptsToDevice();
-          print('stove selected: $index');
+          onTap(level, index);
         },
         child: Container(
           height: _iconContainerHeight,

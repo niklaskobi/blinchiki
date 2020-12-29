@@ -1,9 +1,12 @@
+import 'package:blinchiki_app/models/steering_setting.dart';
 import 'package:blinchiki_app/widgets/svg_icons_list_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
+import 'package:blinchiki_app/data/fileIO.dart';
+import 'dart:convert';
 
 class SteeringScrollableBlockWidget extends StatefulWidget {
   final int receiptIndex;
@@ -38,7 +41,33 @@ class _SteeringScrollableBlockWidgetState extends State<SteeringScrollableBlockW
         });
       },
       receiptIndex: widget.receiptIndex,
+      iconSelectionFunction: iconSelection,
     );
+  }
+
+  void updateIconList(int level) {
+    SteeringSetting steering =
+        Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(widget.receiptIndex).steeringSetting;
+    // level 1 and stove selected -> open next level
+    if (steering.getHighestStoveLevel() == 1 && steering.firstStoveIconId == 0) {
+      _insert();
+    }
+    // level 2 and something selected -> open third level
+    else if (steering.getHighestStoveLevel() == 2 && steering.secondStoveIconId != -1) {
+      _insert();
+    }
+  }
+
+  void iconSelection(int level, int newIconId) {
+    // set icon in receipt
+    Provider.of<ReceiptList>(context, listen: false).setSteeringIcon(widget.receiptIndex, level, newIconId);
+    // write to device's memory
+    writeReceiptsToDevice();
+  }
+
+  /// write receipt list to the device's storage
+  void writeReceiptsToDevice() async {
+    await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
   }
 
   // Used to build an item after it has been removed from the list. This
@@ -76,6 +105,12 @@ class _SteeringScrollableBlockWidgetState extends State<SteeringScrollableBlockW
   /*
   @override
   Widget build(BuildContext context) {
+    Iterable<int> initItems = getInitList(context);
+    _list = ListModel<int>(
+      listKey: _listKey,
+      initialItems: initItems,
+      removedItemBuilder: _buildRemovedItem,
+    );
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -102,6 +137,7 @@ class _SteeringScrollableBlockWidgetState extends State<SteeringScrollableBlockW
     );
   }
    */
+
   @override
   Widget build(BuildContext context) {
     Iterable<int> initItems = getInitList(context);
@@ -157,7 +193,9 @@ class ListModel<E> {
   AnimatedListState get _animatedList => listKey.currentState;
 
   void insert(int index, E item) {
+    print("insert into $_items, index; $index, item: $item");
     _items.insert(index, item);
+    print("inserted: $_items");
     _animatedList.insertItem(index);
   }
 
@@ -192,7 +230,8 @@ class CardItem extends StatelessWidget {
       this.onTap,
       @required this.item,
       this.selected = false,
-      @required this.receiptIndex})
+      @required this.receiptIndex,
+      this.iconSelectionFunction})
       : assert(animation != null),
         assert(item != null && item >= 0),
         assert(selected != null),
@@ -203,15 +242,11 @@ class CardItem extends StatelessWidget {
   final int item;
   final bool selected;
   final int receiptIndex;
+  final Function iconSelectionFunction;
 
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle = Theme.of(context).textTheme.headline4;
-
-    void iconSelection(int level, int index) {
-      Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(receiptIndex);
-      //if (receipt.steeringSetting.)
-    }
 
     if (selected) textStyle = textStyle.copyWith(color: Colors.lightGreenAccent[400]);
     return Padding(
@@ -219,7 +254,7 @@ class CardItem extends StatelessWidget {
       child: SizeTransition(
         axis: Axis.vertical,
         sizeFactor: animation,
-        child: Center(child: SvgIconsListWidget(receiptIndex: receiptIndex, level: item)),
+        child: Center(child: SvgIconsListWidget(receiptIndex: receiptIndex, level: item, onTap: iconSelectionFunction)),
         /*GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: onTap,
