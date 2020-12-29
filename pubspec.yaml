@@ -49,6 +49,7 @@ flutter:
   assets:
     - assets/icons/general/
     - assets/icons/stoves/
+    - assets/icons/units/
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

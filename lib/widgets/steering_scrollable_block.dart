@@ -231,6 +231,8 @@ class CardItem extends StatelessWidget {
       @required this.item,
       this.selected = false,
       @required this.receiptIndex,
+      this.isActiveFunction,
+      this.list,
       this.iconSelectionFunction})
       : assert(animation != null),
         assert(item != null && item >= 0),
@@ -243,6 +245,8 @@ class CardItem extends StatelessWidget {
   final bool selected;
   final int receiptIndex;
   final Function iconSelectionFunction;
+  final Function isActiveFunction;
+  final List<String> list;
 
   @override
   Widget build(BuildContext context) {
@@ -254,20 +258,13 @@ class CardItem extends StatelessWidget {
       child: SizeTransition(
         axis: Axis.vertical,
         sizeFactor: animation,
-        child: Center(child: SvgIconsListWidget(receiptIndex: receiptIndex, level: item, onTap: iconSelectionFunction)),
-        /*GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: onTap,
-          child: SizedBox(
-            height: 80.0,
-            child: Card(
-              color: Colors.primaries[item % Colors.primaries.length],
-              child: Center(
-                child: Text('Item $item', style: textStyle),
-              ),
-            ),
-          ),
-        ),*/
+        child: Center(
+            child: SvgIconsListWidget(
+          receiptIndex: receiptIndex,
+          iconPathList: list,
+          isActive: isActiveFunction,
+          onTap: iconSelectionFunction,
+        )),
       ),
     );
   }

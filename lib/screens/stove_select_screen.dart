@@ -3,7 +3,6 @@ import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/widgets/icon_selection_separator.dart';
 import 'package:blinchiki_app/widgets/number_enter_field.dart';
-import 'package:blinchiki_app/widgets/steering_scrollable_block.dart';
 import 'package:blinchiki_app/widgets/svg_icons_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -43,9 +42,10 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
       writeReceiptsToDevice();
     }
 
+    bool isActive(int index) => receipt.steeringSetting.isIndexActive(0, index);
+
     return Scaffold(
       body: ListView(
-        //mainAxisAlignment: MainAxisAlignment.start,
         shrinkWrap: true,
         children: <Widget>[
           Container(
@@ -64,7 +64,11 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
           ),
           getSeparator(Icons.settings, screenHeight, screenWidth),
           //Flexible(child: SteeringScrollableBlockWidget(receiptIndex: widget.activeIndex)),
-          SvgIconsListWidget(receiptIndex: widget.activeIndex, level: 0, onTap: iconSelection),
+          SvgIconsListWidget(
+              receiptIndex: widget.activeIndex,
+              iconPathList: iconDataSpec.getStoveIconsList(0),
+              isActive: isActive,
+              onTap: iconSelection),
           getSeparator(Icons.translate, screenHeight, screenWidth),
           getSeparator(Icons.tune, screenHeight, screenWidth),
           getNumberField(receipt.steeringSetting.min, "Min", screenHeight * 0.02),

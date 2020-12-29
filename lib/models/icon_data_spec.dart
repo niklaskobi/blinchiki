@@ -1,9 +1,7 @@
 import 'package:blinchiki_app/models/icon_group.dart';
-import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/steering_setting.dart';
 import 'package:blinchiki_app/models/unit.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'icon_spec.dart';
 import 'icon_group.dart';
 import 'package:blinchiki_app/data/constants.dart';
@@ -17,15 +15,10 @@ class IconDataSpec {
   }
 
   List<Unit> _unitList = [
-    Unit(label: '°C', iconId: 0),
-    Unit(label: '°F', iconId: 1),
-  ];
-
-  // TODO:
-  List<String> _unitIconsList = [
-    'assets/icons/general/stove.svg',
-    'assets/icons/general/grill.svg',
-    'assets/icons/general/microwave.svg',
+    Unit(label: '°C', path: 'assets/icons/general/units/celsius.svg'),
+    Unit(label: '°F', path: 'assets/icons/general/units/fahrenheit.svg'),
+    Unit(label: '°Perc', path: 'assets/icons/general/units/prozentsatz.svg'),
+    Unit(label: 'N', path: 'assets/icons/general/units/buchstabe-n-kleinbuchstaben.svg'),
   ];
 
   List<IconGroup> _receiptGroupIdList = [

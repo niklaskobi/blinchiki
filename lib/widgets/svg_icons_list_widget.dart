@@ -1,13 +1,7 @@
 import 'package:blinchiki_app/data/constants.dart';
-import 'package:blinchiki_app/data/fileIO.dart';
-import 'package:blinchiki_app/models/icon_data_spec.dart';
-import 'package:blinchiki_app/models/receipt.dart';
-import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
-import 'dart:convert';
 
 class SvgIconsListWidget extends StatelessWidget {
   /// Sizes - basic
@@ -17,27 +11,27 @@ class SvgIconsListWidget extends StatelessWidget {
   static double _circularBorder = 10.0;
 
   final int receiptIndex;
-  final int level;
   final Function onTap;
+  final Function isActive;
+  final List<String> iconPathList;
 
-  SvgIconsListWidget({@required this.receiptIndex, @required this.level, @required this.onTap});
+  // TODO:
+  SvgIconsListWidget({
+    @required this.receiptIndex,
+    @required this.iconPathList,
+    @required this.isActive,
+    @required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final IconDataSpec iconDataSpec = IconDataSpec();
-    final list = iconDataSpec.getStoveIconsList(level);
-
-    Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(receiptIndex);
+    //Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(receiptIndex);
 
     Widget iconContainer(int index) {
-      Color _bdColor = receipt.steeringSetting.isIndexActive(level, index)
-          ? kIconSelectionIconBgActive
-          : kIconSelectionIconBgNonActive;
+      Color _bdColor = isActive(index) ? kIconSelectionIconBgActive : kIconSelectionIconBgNonActive;
       return GestureDetector(
         onTap: () {
-          onTap(level, index);
+          onTap(0, index);
         },
         child: Container(
           height: _iconContainerHeight,
@@ -49,7 +43,7 @@ class SvgIconsListWidget extends StatelessWidget {
               height: _iconContainerHeight / 1.7,
               width: _iconContainerHeight / 1.7,
               child: SvgPicture.asset(
-                list[index],
+                iconPathList[index],
               ),
             ),
           ),
@@ -65,7 +59,7 @@ class SvgIconsListWidget extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return Center(child: iconContainer(index));
         },
-        itemCount: list.length,
+        itemCount: iconPathList.length,
       ),
     );
   }
