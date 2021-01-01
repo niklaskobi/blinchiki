@@ -7,6 +7,8 @@ Widget getNumberField(
   double initValue,
   String label,
   double fontSize,
+  Function validateFunction,
+  Function updateValueFunction,
 ) {
   final double _circularBorder = 5.0;
   final double _marginHorizonal = 10.0;
@@ -28,15 +30,18 @@ Widget getNumberField(
             color: Colors.grey,
             fontSize: fontSize,
           )),
-      onChanged: (newText) {},
       onSaved: (newText) {
-        print('onSaved');
+        if (validateFunction(newText)) {
+          updateValueFunction(newText);
+        }
+      },
+      onFieldSubmitted: (newText) {
+        if (validateFunction(newText)) {
+          updateValueFunction(newText);
+        }
       },
       keyboardType: TextInputType.number,
       //inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly], // Only numbers can be entered
-      onFieldSubmitted: (newText) {
-        print(newText);
-      },
     ),
   );
 }

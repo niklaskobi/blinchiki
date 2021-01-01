@@ -9,3 +9,10 @@ int increaseWithBoundary(int curValue, int maxValue) {
 int decreaseWithBoundary(int curValue, int minValue) {
   return curValue - 1 >= minValue ? curValue - 1 : curValue;
 }
+
+bool isNumeric(String s) {
+  if (s == null) {
+    return false;
+  }
+  return double.tryParse(s) != null;
+}

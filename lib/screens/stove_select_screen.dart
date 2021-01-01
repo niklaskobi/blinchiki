@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:blinchiki_app/data/constants.dart';
 import 'dart:convert';
 import 'package:blinchiki_app/data/fileIO.dart';
+import 'package:blinchiki_app/functions/common.dart';
 
 class StoveSelectScreen extends StatefulWidget {
   final int activeIndex;
@@ -48,6 +49,101 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
     bool isStoveIconActive(int index) => receipt.steeringSetting.isIndexActive(0, index);
     bool isUnitIconActive(int index) => receipt.steeringSetting.unitId == index;
 
+    /// if min and max are nulls, it means that the function is called from the
+    /// ui and not from validateMin or validateMax. In that case fetch min and max
+    /// from the receipt.
+    bool validateStep(double min, double max, String input) {
+      if (min == null && max == null) {
+        min = receipt.steeringSetting.min;
+        max = receipt.steeringSetting.max;
+      }
+      print("validate step, min = $min, max = $max, step = $input");
+      if (!isNumeric(input)) {
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: Text('Oh oh!'),
+                  content: Text("Invalid number!"),
+                ));
+        return false;
+      }
+      double diff = max - min;
+      if (diff / 2 >= double.parse(input))
+        return true;
+      else {
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: Text('Duh!'),
+                  content: Text('Step is too small!'),
+                ));
+        return false;
+      }
+    }
+
+    bool validateMin(String input) {
+      if (!isNumeric(input)) {
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: Text('Oh oh!'),
+                  content: Text("Invalid number!"),
+                ));
+        return false;
+      }
+      double min = double.parse(input);
+      if (min >= receipt.steeringSetting.max) {
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: Text('Duh!'),
+                  content: Text('Min must be smaller than Max!'),
+                ));
+        return false;
+      }
+      if (!validateStep(min, receipt.steeringSetting.max, receipt.steeringSetting.step.toString())) return false;
+      return min < receipt.steeringSetting.max;
+    }
+
+    bool validateMax(String input) {
+      if (!isNumeric(input)) {
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: Text('Oh oh!'),
+                  content: Text("Invalid number!"),
+                ));
+        return false;
+      }
+      double max = double.parse(input);
+      if (double.parse(input) <= receipt.steeringSetting.min) {
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: Text('Duh!'),
+                  content: Text('Max must be greater than Min!'),
+                ));
+        return false;
+      }
+      if (!validateStep(receipt.steeringSetting.min, max, receipt.steeringSetting.step.toString())) return false;
+      return max > receipt.steeringSetting.min;
+    }
+
+    void updateStep(String input) {
+      receipt.steeringSetting.step = double.parse(input);
+      writeReceiptsToDevice();
+    }
+
+    void updateMin(String input) {
+      receipt.steeringSetting.min = double.parse(input);
+      writeReceiptsToDevice();
+    }
+
+    void updateMax(String input) {
+      receipt.steeringSetting.max = double.parse(input);
+      writeReceiptsToDevice();
+    }
+
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
@@ -84,9 +180,9 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
             svgSizeFactor: 0.35,
           ),
           getSeparator(Icons.tune, screenHeight, screenWidth),
-          getNumberField(receipt.steeringSetting.min, "Min", screenHeight * 0.02),
-          getNumberField(receipt.steeringSetting.max, "Max", screenHeight * 0.02),
-          getNumberField(receipt.steeringSetting.step, "Step", screenHeight * 0.02),
+          getNumberField(receipt.steeringSetting.min, "Min", screenHeight * 0.02, validateMin, updateMin),
+          getNumberField(receipt.steeringSetting.max, "Max", screenHeight * 0.02, validateMax, updateMax),
+          getNumberField(receipt.steeringSetting.step, "Step", screenHeight * 0.02, validateStep, updateStep),
         ],
       ),
     );
