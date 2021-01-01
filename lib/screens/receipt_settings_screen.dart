@@ -124,7 +124,6 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
       } else if (value + 1 < durations) {
         // save previous value
         saveDurationsMap[value + 1] = receipt.getDuration(value + 1);
-        print(saveDurationsMap.toString());
         receipt.removeDuration();
         writeReceiptsToDevice();
       }
@@ -192,9 +191,10 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
         context: context,
         widget: sliderWidget(
             rowHeight: _rowHeight,
-            divisions: 12,
-            min: 0.0,
-            max: 60.0,
+            divisions:
+                ((receipt.steeringSetting.max - receipt.steeringSetting.min) / receipt.steeringSetting.step).round(),
+            min: receipt.steeringSetting.min,
+            max: receipt.steeringSetting.max,
             sliderValue: receipt.steeringSetting.value,
             sliderFunction: (double newValue) {
               setState(() {
@@ -274,7 +274,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
           TimesColumnWidget(durations: receipt.durations, activeIndex: this._timerIndex),
           SizedBox(width: screenWidth * 0.03),
           Icon(kFireIcon),
-          Text('${receipt.steeringSetting.value}'),
+          Text('${roundDouble(receipt.steeringSetting.value, 2)}'),
           if (isTurnsAvailable) SizedBox(width: screenWidth * 0.03),
           if (isTurnsAvailable) Icon(kTurnsIcon),
           if (isTurnsAvailable) Text('${receipt.durations.length - 1}'),

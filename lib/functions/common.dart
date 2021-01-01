@@ -1,3 +1,5 @@
+import 'dart:math';
+
 int rotatingIncrement(int curValue, int minValue, int maxValue) {
   return curValue + 1 <= maxValue ? curValue + 1 : minValue;
 }
@@ -15,4 +17,9 @@ bool isNumeric(String s) {
     return false;
   }
   return double.tryParse(s) != null;
+}
+
+double roundDouble(double value, int places) {
+  double mod = pow(10.0, places);
+  return ((value * mod).round().toDouble() / mod);
 }

@@ -135,11 +135,15 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
     }
 
     void updateMin(String input) {
-      receipt.steeringSetting.min = double.parse(input);
+      double min = double.parse(input);
+      if (receipt.steeringSetting.value < min) receipt.steeringSetting.value = min;
+      receipt.steeringSetting.min = min;
       writeReceiptsToDevice();
     }
 
     void updateMax(String input) {
+      double max = double.parse(input);
+      if (receipt.steeringSetting.value > max) receipt.steeringSetting.value = max;
       receipt.steeringSetting.max = double.parse(input);
       writeReceiptsToDevice();
     }
