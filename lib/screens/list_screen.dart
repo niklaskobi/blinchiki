@@ -1,4 +1,5 @@
 import 'package:blinchiki_app/data/fileIO.dart';
+import 'package:blinchiki_app/models/default_steering_list.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
 import 'package:blinchiki_app/screens/timer_screen.dart';
 import 'package:blinchiki_app/widgets/receipt_list_widget.dart';
@@ -19,10 +20,13 @@ class _ListScreenState extends State<ListScreen> {
     super.initState();
     //TODO: if file doesn't exist create default initial list
     //TODO: test what happens if file doesn't exist / is corrupted
-    FileIO().readString().then((String json) {
+    /// Load receipts from phone's storage
+    FileIO().readString(FileIO().getReceiptsFile()).then((String json) {
       Provider.of<ReceiptList>(context).initReceiptListFromJson(json);
     });
-    //print("receiptList was initiated: ${Provider.of<ReceiptList>(context).get()}");
+
+    /// Load default steering from phone's storage
+    DefaultSteeringList().initDefaultSteering();
   }
 
   @override

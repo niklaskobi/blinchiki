@@ -27,7 +27,7 @@ class _ReceiptIconBlockWidgetState extends State<ReceiptIconBlockWidget> {
 
     /// write receipt list to the device's storage
     void writeReceiptsToDevice() async {
-      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
+      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()), FileIO().getReceiptsFile());
     }
 
     void onTap(int newIconId) {

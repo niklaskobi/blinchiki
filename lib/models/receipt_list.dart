@@ -26,14 +26,14 @@ class ReceiptList extends ChangeNotifier {
   /// add receipt
   void addReceipt(Receipt r) async {
     _list.add(r);
-    await FileIO().writeString(jsonEncode(toJson()));
+    await FileIO().writeString(jsonEncode(toJson()), FileIO().getReceiptsFile());
     notifyListeners();
   }
 
   /// insert receipt
   void insertReceipt(int index, Receipt r) async {
     _list.insert(index, r);
-    await FileIO().writeString(jsonEncode(toJson()));
+    await FileIO().writeString(jsonEncode(toJson()), FileIO().getReceiptsFile());
     notifyListeners();
   }
 
@@ -133,7 +133,7 @@ class ReceiptList extends ChangeNotifier {
 
   void deleteReceipt(int index) async {
     this._list.removeAt(index);
-    await FileIO().writeString(jsonEncode(toJson()));
+    await FileIO().writeString(jsonEncode(toJson()), FileIO().getReceiptsFile());
     notifyListeners();
   }
 

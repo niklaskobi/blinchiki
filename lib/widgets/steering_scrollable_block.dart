@@ -67,7 +67,7 @@ class _SteeringScrollableBlockWidgetState extends State<SteeringScrollableBlockW
 
   /// write receipt list to the device's storage
   void writeReceiptsToDevice() async {
-    await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
+    await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()), FileIO().getReceiptsFile());
   }
 
   // Used to build an item after it has been removed from the list. This

@@ -1,3 +1,4 @@
+import 'package:blinchiki_app/models/default_steering_list.dart';
 import 'package:blinchiki_app/models/icon_data_spec.dart';
 import 'package:blinchiki_app/models/receipt.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
@@ -30,10 +31,11 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     Receipt receipt = Provider.of<ReceiptList>(context, listen: false).getReceiptByIndex(widget.activeIndex);
+    DefaultSteeringList defaultSteeringList = DefaultSteeringList();
 
     /// write receipt list to the device's storage
     void writeReceiptsToDevice() async {
-      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
+      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()), FileIO().getReceiptsFile());
     }
 
     void stoveIconSelection(int newIconId) {
@@ -184,9 +186,39 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
             svgSizeFactor: 0.35,
           ),
           getSeparator(Icons.tune, screenHeight, screenWidth),
-          getNumberField(receipt.steeringSetting.min, "Min", screenHeight * 0.02, validateMin, updateMin),
-          getNumberField(receipt.steeringSetting.max, "Max", screenHeight * 0.02, validateMax, updateMax),
-          getNumberField(receipt.steeringSetting.step, "Step", screenHeight * 0.02, validateStep, updateStep),
+          getNumberField(
+              defaultSteeringList
+                  .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                      .getReceiptByIndex(widget.activeIndex)
+                      .steeringSetting
+                      .firstStoveIconId)
+                  .min,
+              "Min",
+              screenHeight * 0.02,
+              validateMin,
+              updateMin),
+          getNumberField(
+              defaultSteeringList
+                  .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                      .getReceiptByIndex(widget.activeIndex)
+                      .steeringSetting
+                      .firstStoveIconId)
+                  .max,
+              "Max",
+              screenHeight * 0.02,
+              validateMax,
+              updateMax),
+          getNumberField(
+              defaultSteeringList
+                  .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                      .getReceiptByIndex(widget.activeIndex)
+                      .steeringSetting
+                      .firstStoveIconId)
+                  .step,
+              "Step",
+              screenHeight * 0.02,
+              validateStep,
+              updateStep),
         ],
       ),
     );

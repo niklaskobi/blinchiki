@@ -10,7 +10,6 @@ class SteeringSetting {
   double step;
   double value;
   int unitId;
-  int mainStoveIconId; //TODO: delete this
   int firstStoveIconId;
   int secondStoveIconId;
   int thirdStoveIconId;
@@ -51,7 +50,6 @@ class SteeringSetting {
     @required this.step,
     @required this.value,
     @required this.unitId,
-    @required this.mainStoveIconId,
     @required this.firstStoveIconId,
     @required this.secondStoveIconId,
     @required this.thirdStoveIconId,
@@ -64,7 +62,6 @@ class SteeringSetting {
       step: this.step,
       value: this.value,
       unitId: this.unitId,
-      mainStoveIconId: this.mainStoveIconId,
       firstStoveIconId: this.firstStoveIconId,
       secondStoveIconId: this.secondStoveIconId,
       thirdStoveIconId: this.thirdStoveIconId,
@@ -77,7 +74,6 @@ class SteeringSetting {
         step = json['step'],
         value = json['value'],
         unitId = json['unitId'],
-        mainStoveIconId = json['mainStoveIconId'],
         firstStoveIconId = json['firstStoveIconId'],
         secondStoveIconId = json['secondStoveIconId'],
         thirdStoveIconId = json['thirdStoveIconId'];
@@ -88,7 +84,6 @@ class SteeringSetting {
         'step': step,
         'value': value,
         'unitId': unitId,
-        'mainStoveIconId': mainStoveIconId,
         'firstStoveIconId': firstStoveIconId,
         'secondStoveIconId': secondStoveIconId,
         'thirdStoveIconId': thirdStoveIconId,

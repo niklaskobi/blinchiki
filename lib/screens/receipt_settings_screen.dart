@@ -56,7 +56,7 @@ class _ReceiptSettingsScreenState extends State<ReceiptSettingsScreen> {
 
     /// write receipt list to the device's storage
     void writeReceiptsToDevice() async {
-      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()));
+      await FileIO().writeString(jsonEncode(Provider.of<ReceiptList>(context).toJson()), FileIO().getReceiptsFile());
     }
 
     /// returns the timer index if turns counter is greater than 1

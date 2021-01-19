@@ -6,6 +6,13 @@ import 'icon_spec.dart';
 import 'icon_group.dart';
 import 'package:blinchiki_app/data/constants.dart';
 
+class IconPathWithId {
+  String path;
+  int id;
+
+  IconPathWithId({@required this.path, @required this.id});
+}
+
 class IconDataSpec {
   /// making class a singleton
   static final IconDataSpec _instance = IconDataSpec._internal();
@@ -16,15 +23,15 @@ class IconDataSpec {
 
   //TODO: remove labels, they are not used anywhere
   List<Unit> _unitList = [
-    Unit(label: '°C', path: 'assets/icons/units/regler.svg'),
-    Unit(label: '°C', path: 'assets/icons/units/celsius.svg'),
-    Unit(label: '°F', path: 'assets/icons/units/fahrenheit.svg'),
-    Unit(label: '%', path: 'assets/icons/units/prozentsatz.svg'),
-    Unit(label: '%', path: 'assets/icons/units/blitz.svg'),
-    Unit(label: '', path: 'assets/icons/units/feuer_bw.svg'),
-    Unit(label: '', path: 'assets/icons/units/strahlung_bw.svg'),
-    Unit(label: '', path: 'assets/icons/units/inf.svg'),
-    Unit(label: '', path: 'assets/icons/units/x-markierung.svg'),
+    Unit(label: '°C', path: 'assets/icons/units/regler.svg', id: 0),
+    Unit(label: '°C', path: 'assets/icons/units/celsius.svg', id: 1),
+    Unit(label: '°F', path: 'assets/icons/units/fahrenheit.svg', id: 2),
+    Unit(label: '%', path: 'assets/icons/units/prozentsatz.svg', id: 3),
+    Unit(label: '%', path: 'assets/icons/units/blitz.svg', id: 4),
+    Unit(label: '', path: 'assets/icons/units/feuer_bw.svg', id: 5),
+    Unit(label: '', path: 'assets/icons/units/strahlung_bw.svg', id: 6),
+    Unit(label: '', path: 'assets/icons/units/inf.svg', id: 7),
+    Unit(label: '', path: 'assets/icons/units/x-markierung.svg', id: 8),
   ];
 
   List<IconGroup> _receiptGroupIdList = [
@@ -45,17 +52,16 @@ class IconDataSpec {
     IconSpec(iconData: Icons.ac_unit, groupId: 2, id: 200),
   ];
 
-  List<String> _firstStoveIconsList = [
-    'assets/icons/general/stove.svg',
-    'assets/icons/general/grill.svg',
-    'assets/icons/general/microwave.svg',
-    'assets/icons/general/bbq.svg',
-    'assets/icons/general/electric-grill.svg',
-    'assets/icons/general/blender.svg',
-    'assets/icons/general/toaster_bread.svg',
-    'assets/icons/general/gas.svg',
-    'assets/icons/general/kitchen.svg',
-    'assets/icons/general/stove_1.svg',
+  // TODO: link paths to the default settings
+  List<IconPathWithId> _firstStoveIconsList = [
+    IconPathWithId(path: 'assets/icons/general/stove.svg', id: 0),
+    IconPathWithId(path: 'assets/icons/general/stove_1.svg', id: 1),
+    IconPathWithId(path: 'assets/icons/general/microwave.svg', id: 2),
+    IconPathWithId(path: 'assets/icons/general/grill.svg', id: 3),
+    IconPathWithId(path: 'assets/icons/general/electric-grill.svg', id: 4),
+    IconPathWithId(path: 'assets/icons/general/toaster_bread.svg', id: 5),
+    IconPathWithId(path: 'assets/icons/general/gas.svg', id: 6),
+    IconPathWithId(path: 'assets/icons/general/kitchen.svg', id: 7),
   ];
 
   List<String> _secondStoveIconsList = [
@@ -73,13 +79,13 @@ class IconDataSpec {
   List<String> getStoveIconsList(int level, {int secondStoveId: -1}) {
     switch (level) {
       case 0:
-        return this._firstStoveIconsList;
+        return this._firstStoveIconsList.map((e) => e.path).toList();
         break;
       case 1:
-        return this._secondStoveIconsList;
+        return this._secondStoveIconsList; // this is old, reimplement it if you want to use it
         break;
       case 2:
-        return _getThirdLevelList(secondStoveId);
+        return _getThirdLevelList(secondStoveId); // this is old, reimplement it if you want to use it
         break;
     }
     return null;
@@ -100,11 +106,12 @@ class IconDataSpec {
   String getMainStoveIcon(SteeringSetting s) {
     switch (s.getHighestStoveLevel()) {
       case 1:
-        return this._firstStoveIconsList[s.firstStoveIconId];
+        return this._firstStoveIconsList[s.firstStoveIconId].path;
       case 2:
-        return this._secondStoveIconsList[s.secondStoveIconId];
+        return this._secondStoveIconsList[s.secondStoveIconId]; // this is old, reimplement it if you want to use it
       case 3:
-        return _getThirdLevelList(s.secondStoveIconId)[s.thirdStoveIconId];
+        return _getThirdLevelList(
+            s.secondStoveIconId)[s.thirdStoveIconId]; // this is old, reimplement it if you want to use it
       default:
         return UNDEF_STR;
     }
