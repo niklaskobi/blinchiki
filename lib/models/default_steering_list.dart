@@ -13,7 +13,7 @@ class DefaultSteeringList {
 
   List<DefaultSteering> _list;
 
-  /// LAST STOP: finished, next : react on steering change, save default steerings, complete list.
+  /// LAST STOP: finished, next : save default steerings, complete list.
 
   ///TODO: complete the default list
   void loadHardCodedSteering() {
@@ -40,6 +40,17 @@ class DefaultSteeringList {
               secondStoveIconId: -1,
               thirdStoveIconId: -1),
           iconId: 1),
+      DefaultSteering(
+          steeringSetting: SteeringSetting(
+              min: 1,
+              max: 100,
+              step: 10,
+              value: 20,
+              unitId: 4,
+              firstStoveIconId: -1,
+              secondStoveIconId: -1,
+              thirdStoveIconId: -1),
+          iconId: 2),
     ];
   }
 

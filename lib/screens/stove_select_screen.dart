@@ -49,7 +49,15 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
     }
 
     bool isStoveIconActive(int index) => receipt.steeringSetting.isIndexActive(0, index);
-    bool isUnitIconActive(int index) => receipt.steeringSetting.unitId == index;
+    //bool isUnitIconActive(int index) => receipt.steeringSetting.unitId == index;
+    bool isUnitIconActive(int index) =>
+        index ==
+        defaultSteeringList
+            .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                .getReceiptByIndex(widget.activeIndex)
+                .steeringSetting
+                .firstStoveIconId)
+            .unitId;
 
     /// if min and max are nulls, it means that the function is called from the
     /// ui and not from validateMin or validateMax. In that case fetch min and max
@@ -186,39 +194,45 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
             svgSizeFactor: 0.35,
           ),
           getSeparator(Icons.tune, screenHeight, screenWidth),
-          getNumberField(
-              defaultSteeringList
-                  .getSetting(Provider.of<ReceiptList>(context, listen: false)
-                      .getReceiptByIndex(widget.activeIndex)
-                      .steeringSetting
-                      .firstStoveIconId)
-                  .min,
-              "Min",
-              screenHeight * 0.02,
-              validateMin,
-              updateMin),
-          getNumberField(
-              defaultSteeringList
-                  .getSetting(Provider.of<ReceiptList>(context, listen: false)
-                      .getReceiptByIndex(widget.activeIndex)
-                      .steeringSetting
-                      .firstStoveIconId)
-                  .max,
-              "Max",
-              screenHeight * 0.02,
-              validateMax,
-              updateMax),
-          getNumberField(
-              defaultSteeringList
-                  .getSetting(Provider.of<ReceiptList>(context, listen: false)
-                      .getReceiptByIndex(widget.activeIndex)
-                      .steeringSetting
-                      .firstStoveIconId)
-                  .step,
-              "Step",
-              screenHeight * 0.02,
-              validateStep,
-              updateStep),
+          SteeringNumberParamWidget(
+            initValue: defaultSteeringList
+                .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                    .getReceiptByIndex(widget.activeIndex)
+                    .steeringSetting
+                    .firstStoveIconId)
+                .min,
+            label: "Min",
+            fontSize: screenHeight * 0.02,
+            validateFunction: validateMin,
+            updateValueFunction: updateMin,
+            activeReceipt: widget.activeIndex,
+          ),
+          SteeringNumberParamWidget(
+            initValue: defaultSteeringList
+                .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                    .getReceiptByIndex(widget.activeIndex)
+                    .steeringSetting
+                    .firstStoveIconId)
+                .max,
+            label: "Max",
+            fontSize: screenHeight * 0.02,
+            validateFunction: validateMax,
+            updateValueFunction: updateMax,
+            activeReceipt: widget.activeIndex,
+          ),
+          SteeringNumberParamWidget(
+            initValue: defaultSteeringList
+                .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                    .getReceiptByIndex(widget.activeIndex)
+                    .steeringSetting
+                    .firstStoveIconId)
+                .step,
+            label: "Step",
+            fontSize: screenHeight * 0.02,
+            validateFunction: validateStep,
+            updateValueFunction: updateStep,
+            activeReceipt: widget.activeIndex,
+          ),
         ],
       ),
     );
