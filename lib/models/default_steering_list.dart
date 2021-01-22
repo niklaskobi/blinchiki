@@ -74,7 +74,12 @@ class DefaultSteeringList {
       if (_list[i].iconId == iconId) index = i;
     }
     _list[index] = DefaultSteering(steeringSetting: setting.copy(), iconId: iconId);
-    await FileIO().writeString(jsonEncode(toJson()), FileIO().getReceiptsFile());
+    saveDefaultSteeringList();
+  }
+
+  /// save steering list
+  void saveDefaultSteeringList() async {
+    await FileIO().writeString(jsonEncode(toJson()), FileIO().getSteeringFile());
   }
 
   Map<String, dynamic> toJson() => {'defaultSteeringList': jsonEncode(this._list)};

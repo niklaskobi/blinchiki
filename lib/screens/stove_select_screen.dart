@@ -59,13 +59,35 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
                 .firstStoveIconId)
             .unitId;
 
+    double getCurrentDefaultMin() => defaultSteeringList
+        .getSetting(Provider.of<ReceiptList>(context, listen: false)
+            .getReceiptByIndex(widget.activeIndex)
+            .steeringSetting
+            .firstStoveIconId)
+        .min;
+
+    double getCurrentDefaultMax() => defaultSteeringList
+        .getSetting(Provider.of<ReceiptList>(context, listen: false)
+            .getReceiptByIndex(widget.activeIndex)
+            .steeringSetting
+            .firstStoveIconId)
+        .max;
+
+    double getCurrentDefaultStep() => defaultSteeringList
+        .getSetting(Provider.of<ReceiptList>(context, listen: false)
+            .getReceiptByIndex(widget.activeIndex)
+            .steeringSetting
+            .firstStoveIconId)
+        .step;
+
     /// if min and max are nulls, it means that the function is called from the
     /// ui and not from validateMin or validateMax. In that case fetch min and max
     /// from the receipt.
+    /// TODO: input -> double
     bool validateStep(double min, double max, String input) {
       if (min == null && max == null) {
-        min = receipt.steeringSetting.min;
-        max = receipt.steeringSetting.max;
+        min = getCurrentDefaultMin();
+        max = getCurrentDefaultMax();
       }
       print("validate step, min = $min, max = $max, step = $input");
       if (!isNumeric(input)) {
@@ -92,6 +114,8 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
     }
 
     bool validateMin(String input) {
+      double currentMax = getCurrentDefaultMax();
+      double currentStep = getCurrentDefaultStep();
       if (!isNumeric(input)) {
         showDialog(
             context: context,
@@ -102,7 +126,7 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
         return false;
       }
       double min = double.parse(input);
-      if (min >= receipt.steeringSetting.max) {
+      if (min >= currentMax) {
         showDialog(
             context: context,
             builder: (_) => AlertDialog(
@@ -111,11 +135,14 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
                 ));
         return false;
       }
-      if (!validateStep(min, receipt.steeringSetting.max, receipt.steeringSetting.step.toString())) return false;
-      return min < receipt.steeringSetting.max;
+      if (!validateStep(min, currentMax, currentStep.toString())) return false;
+      return min < currentMax;
     }
 
     bool validateMax(String input) {
+      double currentMax = getCurrentDefaultMax();
+      double currentMin = getCurrentDefaultMin();
+      double currentStep = getCurrentDefaultStep();
       if (!isNumeric(input)) {
         showDialog(
             context: context,
@@ -126,7 +153,7 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
         return false;
       }
       double max = double.parse(input);
-      if (double.parse(input) <= receipt.steeringSetting.min) {
+      if (double.parse(input) <= currentMin) {
         showDialog(
             context: context,
             builder: (_) => AlertDialog(
@@ -135,27 +162,38 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
                 ));
         return false;
       }
-      if (!validateStep(receipt.steeringSetting.min, max, receipt.steeringSetting.step.toString())) return false;
-      return max > receipt.steeringSetting.min;
+      if (!validateStep(currentMin, max, currentStep.toString())) return false;
+      return max > currentMin;
     }
 
     void updateStep(String input) {
-      receipt.steeringSetting.step = double.parse(input);
-      writeReceiptsToDevice();
+      defaultSteeringList
+          .getSetting(Provider.of<ReceiptList>(context, listen: false)
+              .getReceiptByIndex(widget.activeIndex)
+              .steeringSetting
+              .firstStoveIconId)
+          .step = double.parse(input);
+      DefaultSteeringList().saveDefaultSteeringList();
     }
 
     void updateMin(String input) {
-      double min = double.parse(input);
-      if (receipt.steeringSetting.value < min) receipt.steeringSetting.value = min;
-      receipt.steeringSetting.min = min;
-      writeReceiptsToDevice();
+      defaultSteeringList
+          .getSetting(Provider.of<ReceiptList>(context, listen: false)
+              .getReceiptByIndex(widget.activeIndex)
+              .steeringSetting
+              .firstStoveIconId)
+          .min = double.parse(input);
+      DefaultSteeringList().saveDefaultSteeringList();
     }
 
     void updateMax(String input) {
-      double max = double.parse(input);
-      if (receipt.steeringSetting.value > max) receipt.steeringSetting.value = max;
-      receipt.steeringSetting.max = double.parse(input);
-      writeReceiptsToDevice();
+      defaultSteeringList
+          .getSetting(Provider.of<ReceiptList>(context, listen: false)
+              .getReceiptByIndex(widget.activeIndex)
+              .steeringSetting
+              .firstStoveIconId)
+          .max = double.parse(input);
+      DefaultSteeringList().saveDefaultSteeringList();
     }
 
     return Scaffold(
