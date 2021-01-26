@@ -46,10 +46,17 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
     void unitIconSelection(int newUnitIconId) {
       Provider.of<ReceiptList>(context, listen: false).setUnitId(widget.activeIndex, newUnitIconId);
       writeReceiptsToDevice();
+      defaultSteeringList
+          .getSetting(Provider.of<ReceiptList>(context, listen: false)
+              .getReceiptByIndex(widget.activeIndex)
+              .steeringSetting
+              .firstStoveIconId)
+          .unitId = newUnitIconId;
+      DefaultSteeringList().saveDefaultSteeringList();
     }
 
     bool isStoveIconActive(int index) => receipt.steeringSetting.isIndexActive(0, index);
-    //bool isUnitIconActive(int index) => receipt.steeringSetting.unitId == index;
+
     bool isUnitIconActive(int index) =>
         index ==
         defaultSteeringList
@@ -140,7 +147,6 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
     }
 
     bool validateMax(String input) {
-      double currentMax = getCurrentDefaultMax();
       double currentMin = getCurrentDefaultMin();
       double currentStep = getCurrentDefaultStep();
       if (!isNumeric(input)) {
@@ -177,22 +183,24 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
     }
 
     void updateMin(String input) {
+      double min = double.parse(input);
       defaultSteeringList
           .getSetting(Provider.of<ReceiptList>(context, listen: false)
               .getReceiptByIndex(widget.activeIndex)
               .steeringSetting
               .firstStoveIconId)
-          .min = double.parse(input);
+          .min = min;
       DefaultSteeringList().saveDefaultSteeringList();
     }
 
     void updateMax(String input) {
+      double max = double.parse(input);
       defaultSteeringList
           .getSetting(Provider.of<ReceiptList>(context, listen: false)
               .getReceiptByIndex(widget.activeIndex)
               .steeringSetting
               .firstStoveIconId)
-          .max = double.parse(input);
+          .max = max;
       DefaultSteeringList().saveDefaultSteeringList();
     }
 

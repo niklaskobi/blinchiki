@@ -3,8 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:blinchiki_app/data/constants.dart';
-import 'package:provider/provider.dart';
-import 'package:blinchiki_app/models/receipt_list.dart';
 
 class SteeringNumberParamWidget extends StatefulWidget {
   final double initValue;
