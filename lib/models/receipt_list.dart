@@ -11,7 +11,7 @@ class ReceiptList extends ChangeNotifier {
   List<Receipt> _list;
 
   ReceiptList() {
-    this._list = ReceiptData.defaultReceiptList;
+    this._list = ReceiptData.getDefaultReceiptList();
   }
 
   List<Receipt> get() => this._list;

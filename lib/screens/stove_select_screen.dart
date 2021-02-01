@@ -190,6 +190,20 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
               .steeringSetting
               .firstStoveIconId)
           .min = min;
+      if (defaultSteeringList
+              .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                  .getReceiptByIndex(widget.activeIndex)
+                  .steeringSetting
+                  .firstStoveIconId)
+              .value <
+          min)
+        defaultSteeringList
+            .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                .getReceiptByIndex(widget.activeIndex)
+                .steeringSetting
+                .firstStoveIconId)
+            .value = min;
+
       DefaultSteeringList().saveDefaultSteeringList();
     }
 
@@ -201,6 +215,19 @@ class _StoveSelectScreen extends State<StoveSelectScreen> {
               .steeringSetting
               .firstStoveIconId)
           .max = max;
+      if (defaultSteeringList
+              .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                  .getReceiptByIndex(widget.activeIndex)
+                  .steeringSetting
+                  .firstStoveIconId)
+              .value >
+          max)
+        defaultSteeringList
+            .getSetting(Provider.of<ReceiptList>(context, listen: false)
+                .getReceiptByIndex(widget.activeIndex)
+                .steeringSetting
+                .firstStoveIconId)
+            .value = max;
       DefaultSteeringList().saveDefaultSteeringList();
     }
 
