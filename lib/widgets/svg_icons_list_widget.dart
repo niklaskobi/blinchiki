@@ -52,6 +52,7 @@ class SvgIconsListWidget extends StatelessWidget {
 
     return Container(
       height: _containerHeight,
+      padding: EdgeInsets.only(left: 10),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,

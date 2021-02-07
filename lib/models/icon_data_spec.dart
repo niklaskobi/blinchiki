@@ -55,7 +55,7 @@ class IconDataSpec {
   // TODO: link paths to the default settings
   List<IconPathWithId> _firstStoveIconsList = [
     IconPathWithId(path: 'assets/icons/general/stove.svg', id: 0),
-    IconPathWithId(path: 'assets/icons/general/stove_1.svg', id: 1),
+    IconPathWithId(path: 'assets/icons/general/oven1.svg', id: 1),
     IconPathWithId(path: 'assets/icons/general/microwave.svg', id: 2),
     IconPathWithId(path: 'assets/icons/general/grill.svg', id: 3),
     IconPathWithId(path: 'assets/icons/general/electric-grill.svg', id: 4),

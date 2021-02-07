@@ -1,6 +1,7 @@
 import 'package:blinchiki_app/data/fileIO.dart';
 import 'package:blinchiki_app/models/default_steering_list.dart';
 import 'package:blinchiki_app/models/receipt_list.dart';
+import 'package:blinchiki_app/screens/stove_select_screen.dart';
 import 'package:blinchiki_app/screens/timer_screen.dart';
 import 'package:blinchiki_app/widgets/receipt_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class _ListScreenState extends State<ListScreen> {
         children: <Widget>[
           Expanded(
             child: Container(
+              padding: EdgeInsets.only(top: 10, right: 4, left: 4),
               color: kBackgroundWhite,
               child: ReceiptListWidget(),
             ),
@@ -52,15 +54,17 @@ class _ListScreenState extends State<ListScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      /*
       bottomNavigationBar: BottomAppBar(
+        color: kReceiptCardBackground,
         shape: const CircularNotchedRectangle(),
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {},
+              icon: Icon(Icons.tune),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => StoveSelectScreen(activeIndex: 0)));
+              },
             ),
             IconButton(
               icon: Icon(Icons.search),
@@ -69,7 +73,6 @@ class _ListScreenState extends State<ListScreen> {
           ],
         ),
       ),
-       */
     );
   }
 }

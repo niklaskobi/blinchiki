@@ -27,9 +27,9 @@ class SteeringNumberParamWidget extends StatefulWidget {
 
 class _SteeringNumberParamWidgetState extends State<SteeringNumberParamWidget> {
   final double _circularBorder = 5.0;
-  final double _marginHorizontal = 10.0;
+  final double _marginHorizontal = 15.0;
   final double _marginVertical = 3.0;
-  final double _paddingHorizontal = 13.0;
+  final double _paddingHorizontal = 20.0;
   final double _paddingVertical = 1.0;
 
   DefaultSteeringList defaultSteeringList = DefaultSteeringList();

@@ -10,8 +10,8 @@ class ReceiptCardWidget extends StatelessWidget {
   final IconData iconData;
 
   /// Sizes - basic
-  static double _containerHeight = 100.0;
-  static double _containerMargin = 3.0;
+  static double _containerHeight = 95.0;
+  static double _containerMargin = 4.0;
   static double _circularBorder = 10.0;
 
   /// Sizes - icon
